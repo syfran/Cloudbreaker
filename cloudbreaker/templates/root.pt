@@ -1,0 +1,12 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Cloud Breaker</title>
+</head>
+<body>
+    <div id="title"><h1>Cloud Breaker</h1></div>
+    <div id="submithash">Submit Here</div>
+    <div id="machines">Machines</div>
+    <div id="hashes">Hashes</div>
+</body>
+</html>
