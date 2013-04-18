@@ -2,6 +2,7 @@
 This module is built to keep track of all the machines connected to the server
 """
 import time
+import uuid
 
 machines = {}
 
@@ -10,8 +11,8 @@ class machine:
     Represents a single machine connected to the server.
     Calculates stats on the machine
     """
-    def __init__(self, apikey):
-        self.apikey = apikey
+    def __init__(self):
+        self.uuid = uuid.uuid4()
         self.workshares = 0
         self.hashes = 0
         self.ipaddr = None
