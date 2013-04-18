@@ -4,6 +4,16 @@ Keep track of hashes and workshares
 
 hashes = []
 
+class workshare:
+    """
+    Class to encapsulate workshares
+    """
+    def __init__(self, hashstring, crackmodule, start, size):
+        self.hashstring = hashstring
+        self.crackmodule = crackmodule
+        self.start = start
+        self.size = size
+
 class hashtracker:
     """
     Represent a submitted hash
