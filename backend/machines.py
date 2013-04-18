@@ -14,6 +14,11 @@ class machine:
         self.apikey = apikey
         self.workshares = 0
         self.hashes = 0
+        self.ipaddr = None
+        self.lastcontacttime = None
+        self.firstcontacttime = None
+        self.machinetype = None
+        self.workshare = None
 
     def add_workshare(self, hashes):
         """
@@ -28,31 +33,41 @@ class machine:
         Register contact from this machine
         """
         now = time.time()
-        if self.firstcontact is None:
-            self.firstcontact = now
-        self.lastcontact = now
+        if self.firstcontacttime is None:
+            self.firstcontacttime = now
+        self.lastcontacttime = now
 
 
     def hashRate(self):
         """
         Calculate the average hashrate of the machine 
         """
-        return hashes/self.uptime()
+        uptime = self.uptime()
+        if uptime is None:
+            return None
+        return self.hashes/self.uptime()
 
     def uptime(self):
         """
         Calculate the time this machine has been up
         """
-        return time.time() - self.firstcontact
+        if self.firstcontacttime is None:
+            return None
+        return time.time() - self.firstcontacttime
 
     def lastcontact(self):
         """
         Calculate the time since the last contact
         """
-        return time.time() - self.lastcontact
+        if self.lastcontacttime is None:
+            return None
+        return time.time() - self.lastcontacttime
 
     def to_dict(self):
+        """
+        Return a dictionary representation of this object
+        """
         return {
-            "ip":self.ipaddr, "type":self.machinetype, "hashrate":self.hashRate(),
-            "workshares":self.workshares, "uptime":self.uptime(),
-            "lastcontact":self.lastcontact() }
+            "ip":self.ipaddr, "type":self.machinetype, "hashes":self.hashes, 
+            "hashrate":self.hashRate(), "workshares":self.workshares,
+            "uptime":self.uptime(), "lastcontact":self.lastcontact() }
