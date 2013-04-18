@@ -21,13 +21,16 @@ class machine:
         self.machinetype = None
         self.workshare = None
 
-    def add_workshare(self, hashes):
+    def complete_workshare(self):
         """
         Register completion of a workshare
         """
         self.workshares += 1
-        self.hashes += hashes
+        self.hashes += self.workshare.size
         self.contact()
+
+    def set_workshare(self, workshare):
+        self.workshare = workshare
 
     def contact(self):
         """"
