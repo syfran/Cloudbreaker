@@ -6,7 +6,7 @@ import uuid
 
 machines = {}
 
-class machine:
+class Machine:
     """
     Represents a single machine connected to the server.
     Calculates stats on the machine
@@ -19,18 +19,18 @@ class machine:
         self.lastcontacttime = None
         self.firstcontacttime = None
         self.machinetype = None
-        self.workshare = None
+        self.workshare = (None,None)
 
-    def complete_workshare(self):
+    def complete_workshare(self, shareslot):
         """
         Register completion of a workshare
         """
-        self.workshares += 1
-        self.hashes += self.workshare.size
+        self.workshares[shareslot] += 1
+        self.hashes += self.workshare[shareslot].size
         self.contact()
 
-    def set_workshare(self, workshare):
-        self.workshare = workshare
+    def set_workshare(self, workshare, shareslot):
+        self.workshare[shareslot] = workshare
 
     def contact(self):
         """"
