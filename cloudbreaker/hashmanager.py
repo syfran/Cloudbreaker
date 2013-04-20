@@ -1,28 +1,32 @@
 """
 Keep track of hashes and workshares
 """
-from threading import RLock
 from Queue import Queue
 
 hash_queue = Queue()
 hashes = {}
 
 def get_workshare():
-    try:
-        hash_ = hash_queue.get(timeout=2)
-    except EmptyException:
-        return None
-    if hash_.hashstring not in hashes:
-        return None
-    share = hash_.get_workshare()
-    hash_queue.put(share)
+    share = None
+    hash_ = None
+    while share is not None:
+        try:
+            hash_ = hash_queue.get(timeout=2)
+        except EmptyException:
+            return None
+        if hash_.hashstring not in hashes:
+            return None
+        share = hash_.get_workshare()
+
+    hash_queue.put(hash_)
     return share
 
 def add_hash(hash_):
     hash_queue.put(hash_)
     hashes[hash_.hashstring] = hash_
 
-def remove_hash
+def remove_hash(hash_):
+    del hashes[hash_.hashstring]
 
 class Workshare:
     """
@@ -50,7 +54,6 @@ class HashTracker:
 
         # hard coded for now
         self.sharesize = 30000
-        self.lock = RLock()
 
     def get_workshare(self):
         """
@@ -59,14 +62,14 @@ class HashTracker:
         if self.complete:
             return None
 
-        with self.lock:
-            if self.sent_state + self.sharesize > self.source.size:
-                this_sharesize = self.source.size - self.sent_state
-            else:
-                this_sharesize = self.sharesize
-            workshare = Workshare(self.hashstring, 
-                self.hashtype, self.source, self.sent_state, this_sharesize)
-            self.sent_state += this_sharesize
+        if self.sent_state + self.sharesize > self.source.size:
+            this_sharesize = self.source.size - self.sent_state
+        else:
+            this_sharesize = self.sharesize
+
+        workshare = Workshare(self.hashstring, 
+            self.hashtype, self.source, self.sent_state, this_sharesize)
+        self.sent_state += this_sharesize
         return workshare
 
     def complete_hash(self, password):
@@ -75,5 +78,4 @@ class HashTracker:
 
     def to_dict(self):
         return {
-            "hash":self.hashstring, "progress":self.progress,
-            "password":self.password, "type":self.hashtype}
+            "hash":self.hashstring, "password":self.password, "type":self.hashtype}
