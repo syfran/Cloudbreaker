@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.response import Response
 from hashmanager import add_hash, HashTracker, hashes
 
 @view_config(route_name='root', renderer='templates/root_template.pt')
