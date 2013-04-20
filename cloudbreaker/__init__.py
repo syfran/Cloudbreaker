@@ -10,6 +10,7 @@ def main(global_config, **settings):
     config.add_route('root', '/')
     config.add_route('gethashes', '/hashes')
     config.add_route('submithash', '/submit')
+    config.add_route('getworkshare', '/getshare')
     config.scan()
 
     passwordsource.sources["dict"] = passwordsource.PasswordSource("dict", 10000000)

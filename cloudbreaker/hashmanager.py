@@ -9,13 +9,16 @@ hashes = {}
 def get_workshare():
     share = None
     hash_ = None
-    while share is not None:
+
+    while share is None:
         try:
             hash_ = hash_queue.get(timeout=2)
         except EmptyException:
             return None
+
         if hash_.hashstring not in hashes:
             return None
+
         share = hash_.get_workshare()
 
     hash_queue.put(hash_)
@@ -38,6 +41,9 @@ class Workshare:
         self.passwordsource = passwordsource
         self.start = start
         self.size = size
+    def to_dict(self):
+        return {"hash":self.hashstring, "type":self.hashtype, "source":self.passwordsource.name,
+            "start":self.start, "size":self.size}
 
 class HashTracker:
     """
