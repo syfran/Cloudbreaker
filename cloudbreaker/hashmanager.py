@@ -1,8 +1,28 @@
 """
 Keep track of hashes and workshares
 """
+from threading import RLock
+from Queue import Queue
 
-hashes = []
+hash_queue = Queue()
+hashes = {}
+
+def get_workshare():
+    try:
+        hash_ = hash_queue.get(timeout=2)
+    except EmptyException:
+        return None
+    if hash_.hashstring not in hashes:
+        return None
+    share = hash_.get_workshare()
+    hash_queue.put(share)
+    return share
+
+def add_hash(hash_):
+    hash_queue.put(hash_)
+    hashes[hash_.hashstring] = hash_
+
+def remove_hash
 
 class Workshare:
     """
@@ -24,28 +44,36 @@ class HashTracker:
         self.hashstring = hashstring
         self.hashtype = hashtype
         self.source = source
-        self.state = 0
+        self.sent_state = 0
+        self.complete = False
+        self.password = None
 
         # hard coded for now
         self.sharesize = 30000
-        self.lock = Lock()
+        self.lock = RLock()
 
     def get_workshare(self):
         """
-        Get a new workshare for this hash """ # Keep this synchronized
-        with lock:
-            if self.state + self.hashsize > self.source.size:
-                this_sharesize = self.source.size - self.state
+        Get a new workshare for this hash 
+        """
+        if self.complete:
+            return None
+
+        with self.lock:
+            if self.sent_state + self.sharesize > self.source.size:
+                this_sharesize = self.source.size - self.sent_state
             else:
                 this_sharesize = self.sharesize
             workshare = Workshare(self.hashstring, 
-                self.hashtype, self.source, self.state, this_sharesize)
-            self.state += this_sharesize
+                self.hashtype, self.source, self.sent_state, this_sharesize)
+            self.sent_state += this_sharesize
+        return workshare
 
-    def get_progress(self):
-        return 
+    def complete_hash(self, password):
+        self.complete = True
+        self.password = password
 
     def to_dict(self):
         return {
             "hash":self.hashstring, "progress":self.progress,
-            "type":self.crackmodule.modtype()}
+            "password":self.password, "type":self.hashtype}
