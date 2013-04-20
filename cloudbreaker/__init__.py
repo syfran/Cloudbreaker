@@ -1,4 +1,5 @@
 from pyramid.config import Configurator
+import passwordsource
 
 
 def main(global_config, **settings):
@@ -10,4 +11,6 @@ def main(global_config, **settings):
     config.add_route('gethashes', '/hashes')
     config.add_route('submithash', '/submit')
     config.scan()
+
+    passwordsource.sources["dict"] = passwordsource.PasswordSource("dict", 10000000)
     return config.make_wsgi_app()
