@@ -13,24 +13,22 @@ class Machine:
     """
     def __init__(self):
         self.uuid = uuid.uuid4()
-        self.workshares = 0
-        self.hashes = 0
+        self.workshares_complete = 0
         self.ipaddr = None
         self.lastcontacttime = None
         self.firstcontacttime = None
-        self.machinetype = None
-        self.workshare = (None,None)
+        self.workshares = {}
 
-    def complete_workshare(self, shareslot):
+    def complete_workshare(self, workshare_hash, start):
         """
         Register completion of a workshare
         """
-        self.workshares[shareslot] += 1
-        self.hashes += self.workshare[shareslot].size
+        del workshares[(workshare_hash, start)]
+        self.workshares_complete += 1
         self.contact()
 
-    def set_workshare(self, workshare, shareslot):
-        self.workshare[shareslot] = workshare
+    def add_workshare(self, workshare):
+        self.workshares[(workshare.hashstring, workshare.start)] = workshare
 
     def contact(self):
         """"
@@ -40,16 +38,6 @@ class Machine:
         if self.firstcontacttime is None:
             self.firstcontacttime = now
         self.lastcontacttime = now
-
-
-    def hashRate(self):
-        """
-        Calculate the average hashrate of the machine 
-        """
-        uptime = self.uptime()
-        if uptime is None:
-            return None
-        return self.hashes/self.uptime()
 
     def uptime(self):
         """
@@ -72,6 +60,5 @@ class Machine:
         Return a dictionary representation of this object
         """
         return {
-            "ip":self.ipaddr, "type":self.machinetype, "hashes":self.hashes, 
-            "hashrate":self.hashRate(), "workshares":self.workshares,
+            "ip":self.ipaddr, "workshares":self.workshares_complete,
             "uptime":self.uptime(), "lastcontact":self.lastcontact() }
