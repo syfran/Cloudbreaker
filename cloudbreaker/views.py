@@ -34,6 +34,6 @@ def submithash_view(request):
         sourcename = request.params['source']
     except KeyError: 
         return HTTPBadRequest()
-    hash_ = HashTracker(hashstring, hashtype, sources[sourcename])
+    hash_ = HashTracker(hashstring, hashtype, sources[source])
     add_hash(hash_)
     return Response()

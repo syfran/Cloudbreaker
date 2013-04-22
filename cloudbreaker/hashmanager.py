@@ -6,6 +6,13 @@ from queue import Queue
 hash_queue = Queue()
 hashes = {}
 
+sources = {}
+
+class PasswordSource:
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+
 def get_workshare():
     share = None
     hash_ = None

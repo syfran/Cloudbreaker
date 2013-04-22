@@ -12,7 +12,7 @@ class Machine:
     Calculates stats on the machine
     """
     def __init__(self):
-        self.uuid = uuid.uuid4()
+        self.uuid = str(uuid.uuid4())
         self.workshares_complete = 0
         self.ipaddr = None
         self.lastcontacttime = None
@@ -61,4 +61,4 @@ class Machine:
         """
         return {
             "ip":self.ipaddr, "workshares":self.workshares_complete,
-            "uptime":self.uptime(), "lastcontact":self.lastcontact() }
+            "uptime":self.uptime(), "lastcontact":self.lastcontact(), "uuid":self.uuid}
