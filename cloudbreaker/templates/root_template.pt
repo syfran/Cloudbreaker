@@ -70,9 +70,10 @@
     $(document).ready(function() {
         $("#submithashform").submit(function(event) {
             event.preventDefault();
-            $.post("/submit", $("#submithashform").serialize()
-                , function(data) {
-            });
+            $.post("/submit", $("#submithashform").serialize(),function(data){})
+            .fail(
+                    function() {$("#submitreturn").html("An error occured submiting your hash").delay(5000).html("");}
+            );
             $("input[name=hash]").val("");
         });
     });
