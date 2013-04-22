@@ -15,7 +15,7 @@ def main(global_config, **settings):
     config.add_route('getworkshare', '/getshare')
     config.scan()
 
-    sources['dict'] = PasswordSource('dict', 50000)
+    sources['dictionary'] = PasswordSource('dictionary', 50000)
 
     testmachine = Machine()
     machines[testmachine.uuid] = testmachine

@@ -7,6 +7,7 @@ hash_queue = Queue()
 hashes = {}
 
 sources = {}
+hashtypes = ["sha512"]
 
 class PasswordSource:
     def __init__(self, name, size):

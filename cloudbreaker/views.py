@@ -2,12 +2,12 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.response import Response
 
-from .hashmanager import add_hash, HashTracker, hashes, get_workshare,sources
+from .hashmanager import *
 from .machines import machines
 
 @view_config(route_name='root', renderer='templates/root_template.pt')
 def root_view(request):
-    return {}
+    return {"sources":sources.keys(), "hashtypes":hashtypes}
 
 @view_config(route_name='gethashes', renderer='json')
 def get_hashes_view(request):

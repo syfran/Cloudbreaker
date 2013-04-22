@@ -2,11 +2,103 @@
 <html>
 <head>
     <title>Cloud Breaker</title>
+    <style>
+    #machines {
+        width:50%;
+        float:left;
+    }
+    #hashes {
+        width:50%;
+        float:right;
+    }
+    th {
+       padding: 15px;
+    }
+    td {
+        text-align:center;
+    }
+    #submithash {
+        text-align:center;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+    function update_hashes() {
+        $.getJSON('/hashes', function(data) {
+            table = $('#hashes > table > tbody');
+            table.html("");
+            $.each(data, function(index, val) {
+                toapp = "<tr>";
+                toapp += "<td>" + val.hash + "</td>";
+                toapp += "<td>" + val.type + "</td>";
+                toapp += "<td>" + val.password + "</td>";
+                toapp += "</tr>";
+                table.append(toapp);
+            });
+        });
+    }
+
+    function update_machines() {
+        $.getJSON('/machines', function(data) {
+            table = $('#machines > table > tbody');
+            table.html("");
+            $.each(data, function(index, val) {
+                toapp = "<tr>";
+                toapp += "<td>" + val.ip + "</td>";
+                toapp += "<td>" + val.workshares + "</td>";
+                toapp += "<td>" + val.lastcontact + "</td>";
+                toapp += "<td>" + val.uptime + "</td>";
+                toapp += "</tr>";
+                table.append(toapp);
+            });
+        });
+    }
+
+    function update_page() {
+        update_hashes();
+        update_machines();
+    }
+
+    update_page();
+    setInterval(update_page, 1000);
+    </script>
 </head>
 <body>
     <div id="title"><h1>Cloud Breaker</h1></div>
-    <div id="submithash">Submit Here</div>
-    <div id="machines">Machines</div>
-    <div id="hashes">Hashes</div>
+    <div id="submithash">
+        <form>
+            <input type='text' id="hash">
+            <select id="hashtype">
+                <option tal:repeat="hashtype hashtypes" value="${hashtype}">${hashtype}</option>
+            </select>
+            <select id="source">
+                <option tal:repeat="source sources" value="${source}">${source}</option>
+            </select>
+        </form>
+    </div>
+    <div id="machines">
+        <table>
+        <thead>
+            <tr>
+            <th>IP</th><th>Workshares</th><th>Last Contact</th><th>Uptime</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    </div>
+    <div id="hashes">
+        <table>
+        <thead>
+            <tr>
+            <th>Hash</th><th>Hash Type</th><th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    </div>
 </body>
 </html>

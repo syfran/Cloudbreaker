@@ -2,6 +2,7 @@
 This module is built to keep track of all the machines connected to the server
 """
 import time
+import datetime
 import uuid
 
 machines = {}
@@ -61,4 +62,18 @@ class Machine:
         """
         return {
             "ip":self.ipaddr, "workshares":self.workshares_complete,
-            "uptime":self.uptime(), "lastcontact":self.lastcontact(), "uuid":self.uuid}
+            "uptime": _sec_to_string(self.uptime()), "lastcontact": _sec_to_string(self.lastcontact())}
+
+def _sec_to_string(seconds):
+    minutes,seconds = divmod(seconds, 60)
+    hours,minutes = divmod(minutes, 60)
+    days,hours = divmod(hours, 24)
+    returnstr = ""
+    if days != 0:
+        returnstr += "%d days " % days
+    if hours != 0:
+        returnstr += "%d hours " % hours
+    if minutes != 0:
+        returnstr += "%d minutes " % minutes
+    returnstr += "%.1f seconds" % seconds
+    return returnstr
