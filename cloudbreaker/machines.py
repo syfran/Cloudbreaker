@@ -61,8 +61,10 @@ class Machine:
         Return a dictionary representation of this object
         """
         return {
-            "ip":self.ipaddr, "workshares":self.workshares_complete,
-            "uptime": _sec_to_string(self.uptime()), "lastcontact": _sec_to_string(self.lastcontact())}
+            "ip": "" if self.ipaddr is None else self.ipaddr,
+            "workshares":self.workshares_complete,
+            "uptime": _sec_to_string(self.uptime()),
+            "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):
     minutes,seconds = divmod(seconds, 60)
