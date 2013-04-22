@@ -66,20 +66,34 @@
 
     update_page();
     setInterval(update_page, 1000);
+
+    $(document).ready(function() {
+        $("#submithashform").submit(function(event) {
+            event.preventDefault();
+            $.post("/submit", $("#submithashform").serialize()
+                , function(data) {
+            });
+            $("input[name=hash]").val("");
+        });
+    });
     </script>
 </head>
 <body>
     <div id="title"><h1>Cloud Breaker</h1></div>
     <div id="submithash">
-        <form>
-            <input type='text' id="hash">
-            <select id="hashtype">
+        <form id="submithashform">
+            Add a new hash:
+            <input type='text' name="hash">
+            <select name="type">
                 <option tal:repeat="hashtype hashtypes" value="${hashtype}">${hashtype}</option>
             </select>
-            <select id="source">
+            <select name="source">
                 <option tal:repeat="source sources" value="${source}">${source}</option>
             </select>
+            <button id="submitbutton">Add hash</button>
         </form>
+        <div id="submitreturn">
+        </div>
     </div>
     <div id="machines">
         <table>
