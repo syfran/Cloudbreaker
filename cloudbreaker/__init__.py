@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
-import passwordsource
+from .machines import machines, Machine
+from .hashmanager import PasswordSource,sources
 
 
 def main(global_config, **settings):

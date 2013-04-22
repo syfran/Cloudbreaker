@@ -1,7 +1,7 @@
 """
 Keep track of hashes and workshares
 """
-from Queue import Queue
+from queue import Queue
 
 hash_queue = Queue()
 hashes = {}
