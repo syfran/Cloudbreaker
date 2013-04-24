@@ -14,7 +14,7 @@ class PasswordSource:
         self.name = name
         self.size = size
 
-def get_workshare():
+def get_workshare(size):
     share = None
     hash_ = None
 
@@ -27,7 +27,7 @@ def get_workshare():
         if hash_.hashstring not in hashes:
             return None
 
-        share = hash_.get_workshare()
+        share = hash_.get_workshare(size)
 
     hash_queue.put(hash_)
     return share
@@ -66,20 +66,17 @@ class HashTracker:
         self.complete = False
         self.password = None
 
-        # hard coded for now
-        self.sharesize = 30000
-
-    def get_workshare(self):
+    def get_workshare(self, size):
         """
         Get a new workshare for this hash 
         """
         if self.complete:
             return None
 
-        if self.sent_state + self.sharesize > self.source.size:
+        if self.sent_state + size > self.source.size:
             this_sharesize = self.source.size - self.sent_state
         else:
-            this_sharesize = self.sharesize
+            this_sharesize = size
 
         workshare = Workshare(self.hashstring, 
             self.hashtype, self.source, self.sent_state, this_sharesize)
