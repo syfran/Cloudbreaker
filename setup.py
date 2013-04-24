@@ -12,6 +12,7 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'waitress',
+    'boto',
     ]
 
 setup(name='cloudbreaker',
