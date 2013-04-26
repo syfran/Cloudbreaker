@@ -13,6 +13,7 @@ def main(global_config, **settings):
     config.add_route('submithash', '/submit')
     config.add_route('getmachines', '/machines')
     config.add_route('getworkshare', '/getshare')
+    config.add_route('completeworkshare', '/completeshare')
     config.scan()
 
     sources['dictionary'] = PasswordSource('dictionary', 50000)
