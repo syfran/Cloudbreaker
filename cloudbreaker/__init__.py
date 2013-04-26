@@ -19,8 +19,7 @@ def main(global_config, **settings):
     sources['dictionary'] = PasswordSource('dictionary', 50000)
 
     testmachine = Machine()
-    testmachine.ipaddr = "127.0.0.1"
+    testmachine.uuid = "abcd"
     machines[testmachine.uuid] = testmachine
-    testmachine.contact()
 
     return config.make_wsgi_app()
