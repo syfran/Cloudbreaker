@@ -21,10 +21,18 @@ def get_machines(request):
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):
     try:
+        uuid = request.params['uuid']
+        machine = machines[uuid]
+    except KeyError:
+        return HTTPForbidden()
+
+    machine.contact()
+    try:
         size = request.params['size']
     except KeyError:
         size = 30000 
     share = get_workshare(int(size))
+    machine.add_workshare(share)
     if share is not None:
         return share.to_dict()
     else:
