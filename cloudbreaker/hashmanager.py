@@ -1,7 +1,7 @@
 """
 Keep track of hashes and workshares
 """
-from Queue import Queue
+from Queue import Queue, Empty
 
 hash_queue = Queue()
 hashes = {}
@@ -21,7 +21,7 @@ def get_workshare(size):
     while share is None:
         try:
             hash_ = hash_queue.get(timeout=2)
-        except EmptyException:
+        except Empty:
             return None
 
         if hash_.hashstring not in hashes:
