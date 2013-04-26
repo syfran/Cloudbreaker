@@ -54,7 +54,7 @@ def complete_workshare_view(request):
         return HTTPBadRequest()
 
     if 'password' in request.params:
-        hashes[hash_string].password = request.params['password']
+        hashes[hash_string].complete_hash(request.params['password']) 
         
     machine.contact()
     machine.complete_workshare(hash_string, workshare_start)
