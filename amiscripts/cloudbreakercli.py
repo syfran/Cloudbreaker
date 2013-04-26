@@ -25,6 +25,19 @@ class CloudBreakerServer:
                 share = None
         return share
 
+    def complete_workshare(self, workshare, password=None):
+        post_params = {"uuid":workshare['uuid'], 
+            'hash':workshare['hash'],
+            'start':workshare['start']}
+        if password is not None:
+            post_params['password'] = password
+        complete_workshare_addr = "http://" + self.config.get_server() + "/completeshare"
+        try:
+            requests.post(complete_workshare_addr, params=post_params)
+        except requests.ConnectionError:
+            print("Error connecting to server", file=sys.stderr)
+            return
+
 class CloudBreakerConf:
     def __init__(self):
         self._server = None
