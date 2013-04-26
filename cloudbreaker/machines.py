@@ -68,6 +68,8 @@ class Machine:
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):
+    if seconds is None:
+        return "Never"
     minutes,seconds = divmod(seconds, 60)
     hours,minutes = divmod(minutes, 60)
     days,hours = divmod(hours, 24)
