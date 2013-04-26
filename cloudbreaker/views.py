@@ -26,6 +26,7 @@ def get_workshare_view(request):
     except KeyError:
         return HTTPForbidden()
 
+    machine.ipaddr = request.client_addr
     machine.contact()
     try:
         size = request.params['size']
