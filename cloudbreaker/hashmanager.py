@@ -3,7 +3,10 @@ Keep track of hashes and workshares
 """
 from Queue import Queue, Empty
 
+# synchronized queue of hashtrackers
 hash_queue = Queue()
+# All hashes known, key is the hash string
+# Hash strings are assumed to be unique
 hashes = {}
 
 sources = {}
@@ -33,8 +36,9 @@ def get_workshare(size):
     return share
 
 def add_hash(hash_):
-    hash_queue.put(hash_)
-    hashes[hash_.hashstring] = hash_
+    if hash_ not in hashes:
+        hash_queue.put(hash_)
+        hashes[hash_.hashstring] = hash_
 
 def remove_hash(hash_):
     del hashes[hash_.hashstring]
