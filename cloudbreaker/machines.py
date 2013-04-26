@@ -24,7 +24,7 @@ class Machine:
         """
         Register completion of a workshare
         """
-        del workshares[(workshare_hash, start)]
+        del self.workshares[(workshare_hash, int(start))]
         self.workshares_complete += 1
         self.contact()
 
