@@ -1,4 +1,7 @@
+from __future__ import print_function
 import requests
+import sys
+import time
 
 CONF_PATH = "/etc/cloudbreaker.conf"
 
@@ -6,9 +9,21 @@ class CloudBreakerServer:
     def __init__(self):
         self.config = CloudBreakerConf()
 
-
-    def connect(self):
-        pass
+    def get_workshare(self, workshare_size):
+        post_params = {"uuid":self.config.get_uuid(), "size":workshare_size}
+        get_workshare_addr = "http://" + self.config.get_server() + "/getshare"
+        share = None
+        while share is None:
+            try:
+                response = requests.post(get_workshare_addr, params=post_params)
+            except requests.ConnectionError:
+                print("Error connecting to server", file=sys.stderr)
+                return None
+            share = response.json()
+            if 'sleep' in share:
+                time.sleep(share['sleep'])
+                share = None
+        return share
 
 class CloudBreakerConf:
     def __init__(self):
