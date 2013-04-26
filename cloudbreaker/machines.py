@@ -64,6 +64,7 @@ class Machine:
             "ip": "" if self.ipaddr is None else self.ipaddr,
             "workshares":self.workshares_complete,
             "uptime": _sec_to_string(self.uptime()),
+            "openshares":len(self.workshares),
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):

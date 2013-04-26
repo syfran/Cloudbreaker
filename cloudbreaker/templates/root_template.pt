@@ -51,6 +51,7 @@
                 toapp = "<tr>";
                 toapp += "<td>" + val.ip + "</td>";
                 toapp += "<td>" + val.workshares + "</td>";
+                toapp += "<td>" + val.openshares + "</td>";
                 toapp += "<td>" + val.lastcontact + "</td>";
                 toapp += "<td>" + val.uptime + "</td>";
                 toapp += "</tr>";
@@ -100,7 +101,8 @@
         <table>
         <thead>
             <tr>
-            <th>IP</th><th>Workshares</th><th>Last Contact</th><th>Uptime</th>
+            <th>IP</th><th>Complete Workshares</th><th>Open Workshares</th>
+            <th>Last Contact</th><th>Uptime</th>
             </tr>
         </thead>
         <tbody>
