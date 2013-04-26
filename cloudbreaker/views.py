@@ -33,8 +33,8 @@ def get_workshare_view(request):
     except KeyError:
         size = 30000 
     share = get_workshare(int(size))
-    machine.add_workshare(share)
     if share is not None:
+        machine.add_workshare(share)
         return share.to_dict()
     else:
         return {"sleep":10}
