@@ -81,6 +81,8 @@ class HashTracker:
 
         if self.sent_state + size > self.source.size:
             this_sharesize = self.source.size - self.sent_state
+            if this_sharesize == 0:
+                return None
         else:
             this_sharesize = size
 
