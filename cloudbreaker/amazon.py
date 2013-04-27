@@ -12,9 +12,9 @@ def init_boto():
     Establish a connection to amazon aws with our credentials
     """
     global conn
-    # us-east-1 has has available gpu instances and genrally lower spot prices.
-    # Should be made configurable
-    conn = boto.ec2.connect_to_region("us-east-1")
+
+    # us-east-1 and eu-west-1 are the only areas that have gpu
+    conn = boto.ec2.connect_to_region("eu-west-1")
 
 def get_spot_price():
     price = conn.get_spot_price_history(instance_type="cg1.4xlarge", 
