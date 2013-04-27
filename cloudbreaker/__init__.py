@@ -41,10 +41,10 @@ def main(global_config, **settings):
 
     init_boto()
 
-    sources['dictionary'] = PasswordSource('dictionary', 50000)
+    sources['ruledict'] = PasswordSource('ruledict', "Dictionary with jtr rule mangling", 394748, 51)
 
     testmachine = Machine()
-    testmachine.uuid = "abcd"
+    testmachine.uuid = "abcdef"
     machines[testmachine.uuid] = testmachine
 
     return config.make_wsgi_app()

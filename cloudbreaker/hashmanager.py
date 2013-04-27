@@ -13,9 +13,11 @@ sources = {}
 hashtypes = ["sha512"]
 
 class PasswordSource:
-    def __init__(self, name, size):
+    def __init__(self, name, fullname, size, mult):
         self.name = name
+        self.fullname = fullname
         self.size = size
+        self.hash_multiplier = mult
 
 def get_workshare(size):
     share = None
