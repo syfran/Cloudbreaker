@@ -36,7 +36,10 @@ def main(global_config, **settings):
     config.add_route('getmachines', '/machines')
     config.add_route('getworkshare', '/getshare')
     config.add_route('completeworkshare', '/completeshare')
+    config.add_route('getspotprice', '/spotprice')
     config.scan()
+
+    init_boto()
 
     sources['dictionary'] = PasswordSource('dictionary', 50000)
 

@@ -60,9 +60,14 @@
         });
     }
 
+    function update_spot_price() {
+        $("#spotprice").load('/spotprice')
+    }
+
     function update_page() {
         update_hashes();
         update_machines();
+        update_spot_price();
     }
 
     update_page();
@@ -82,6 +87,20 @@
 </head>
 <body>
     <div id="title"><h1>Cloud Breaker</h1></div>
+        <div id="machines">
+        Spot price: <span id="spotprice"></span>
+        <table>
+        <thead>
+            <tr>
+            <th>IP</th><th>Complete Workshares</th><th>Open Workshares</th>
+            <th>Last Contact</th><th>Uptime</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    </div>
+    <div id="hashes">
     <div id="submithash">
         <form id="submithashform">
             Add a new hash:
@@ -97,20 +116,7 @@
         <div id="submitreturn">
         </div>
     </div>
-    <div id="machines">
-        <table>
-        <thead>
-            <tr>
-            <th>IP</th><th>Complete Workshares</th><th>Open Workshares</th>
-            <th>Last Contact</th><th>Uptime</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        </table>
-    </div>
-    <div id="hashes">
-        <table>
+    <table>
         <thead>
             <tr>
             <th>Hash</th><th>Hash Type</th><th>Password</th>

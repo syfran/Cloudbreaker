@@ -5,6 +5,7 @@ from pyramid.security import forget, authenticated_userid
 
 from .hashmanager import *
 from .machines import machines
+from .amazon import *
 
 @view_config(route_name='root', renderer='templates/root_template.pt')
 def root_view(request):
@@ -15,9 +16,12 @@ def get_hashes_view(request):
     return list( map(lambda x: x.to_dict(), hashes.values()))
 
 @view_config(route_name='getmachines', renderer='json')
-def get_machines(request):
+def get_machines_view(request):
     return list(map(lambda x: x.to_dict(), machines.values()))
 
+@view_config(route_name='getspotprice')
+def get_spot_price_view(request):
+    return Response(str(get_spot_price()))
 
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):
