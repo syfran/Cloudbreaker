@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import *
 from pyramid.response import Response
+from pyramid.security import forget, authenticated_userid
 
 from .hashmanager import *
 from .machines import machines
@@ -62,6 +63,10 @@ def complete_workshare_view(request):
 
 @view_config(route_name='submithash')
 def submithash_view(request):
+    if authenticated_userid(request) is None:
+        response = HTTPUnauthorized()
+        response.headers.update(forget(request))
+        return response
     try:
         hashstring = request.params['hash']
         hashtype = request.params['type'] 
