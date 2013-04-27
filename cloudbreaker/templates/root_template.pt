@@ -78,7 +78,8 @@
             event.preventDefault();
             $.post("/submit", $("#submithashform").serialize(),function(data){})
             .fail(
-                    function() {$("#submitreturn").html("An error occured submiting your hash").delay(5000).html("");}
+                    function() {$("#submitreturn")
+                        .html("An error occured submiting your hash").delay(5000).html("");}
             );
             $("input[name=hash]").val("");
         });
