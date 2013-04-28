@@ -3,14 +3,6 @@
 <head>
     <title>Cloud Breaker</title>
     <style>
-    #machines {
-        width:50%;
-        float:left;
-    }
-    #hashes {
-        width:50%;
-        float:right;
-    }
     th {
        padding: 15px;
     }
@@ -111,19 +103,6 @@
 </head>
 <body>
     <div id="title"><h1>Cloud Breaker</h1></div>
-        <div id="machines">
-        Spot price: <span id="spotprice"></span>
-        <table>
-        <thead>
-            <tr>
-            <th>IP</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
-            <th>Last Contact</th><th>Uptime</th><th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        </table>
-    </div>
     <div id="hashes">
     <div id="submithash">
         <form id="submithashform">
@@ -144,6 +123,19 @@
         <thead>
             <tr>
             <th>Hash</th><th>Hash Type</th><th>Progress</th><th>Password</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    </div>
+    <div id="machines">
+        Spot price: <span id="spotprice"></span>
+        <table>
+        <thead>
+            <tr>
+            <th>IP</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
+            <th>Last Contact</th><th>Uptime</th><th></th>
             </tr>
         </thead>
         <tbody>
