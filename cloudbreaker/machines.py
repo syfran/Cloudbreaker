@@ -25,7 +25,7 @@ class Machine:
         """
         Register completion of a workshare
         """
-        workshare = self.workshares[(workshare_hash, int(start)]
+        workshare = self.workshares[(workshare_hash, int(start))]
         self.workshares_complete += 1
         self.hashrate = workshare.size / (time.time() - workshare.init_time)
         self.contact()
@@ -68,7 +68,7 @@ class Machine:
             "workshares":self.workshares_complete,
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
-            "hashrate": "%d" % self.hashrate,
+            "hashrate": "%d hashes/s" % self.hashrate,
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):

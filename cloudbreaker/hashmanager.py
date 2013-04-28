@@ -109,5 +109,5 @@ class HashTracker:
         return {
             "hash":self.hashstring,
             "password": "" if self.password is None else self.password,
-            "progress":"%d\%" % (self.complete_state /self.source.size),
+            "progress":"%d%%" % (self.complete_state /self.source.size),
             "type":self.hashtype}

@@ -35,6 +35,7 @@
             toapp = "<tr>";
             toapp += "<td>" + val.hash.substring(0,10) + "..</td>";
             toapp += "<td>" + val.type + "</td>";
+            toapp += "<td>" + val.progress + "</td>";
             toapp += "<td>" + val.password + "</td>";
             toapp += "<td><a hashstr='" + val.hash + 
                 "' class='rmhash' href=''>remove</a></td>";
@@ -49,7 +50,7 @@
         $.each(data, function(index, val) {
             toapp = "<tr>";
             toapp += "<td>" + val.ip + "</td>";
-            toapp += "<td>" + val.hashrate + " h/s</td>";
+            toapp += "<td>" + val.hashrate + "</td>";
             toapp += "<td>" + val.workshares + "</td>";
             toapp += "<td>" + val.openshares + "</td>";
             toapp += "<td>" + val.lastcontact + "</td>";
@@ -131,7 +132,7 @@
     <table>
         <thead>
             <tr>
-            <th>Hash</th><th>Hash Type</th><th>Password</th><th></th>
+            <th>Hash</th><th>Hash Type</th><th>Progress</th><th>Password</th><th></th>
             </tr>
         </thead>
         <tbody>
