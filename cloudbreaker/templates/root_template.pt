@@ -69,35 +69,52 @@
     update_page();
     setInterval(update_page, 5000);
 
-    $(document).ready(function() {
-        $("#submithashform").submit(function(event) {
-            event.preventDefault();
-            $.post("/submit", $("#submithashform").serialize(),function(data){})
-            .fail(
-                    function() {$("#submitreturn")
-                        .html("An error occured submiting your hash").delay(5000).html("");}
-            );
-            $("input[name=hash]").val("");
-            update_page();
+    $(document).on("submit", "#submithashform", function(event) {
+        event.preventDefault();
+        $.post("/submit", $("#submithashform").serialize(),function(data){})
+        .fail(
+                function() {$("#submitreturn")
+                    .html("An error occured submiting your hash").delay(5000).html("");}
+        );
+        $("input[name=hash]").val("");
+        update_page();
+    });
+    $(document).on("submit", "#requestmach", function(event) {
+        event.preventDefault();
+
+        params = {}
+
+        if($("input[name=spot]").attr('checked')) {
+            params["spot"] = true;
+            params["price"] = $("input[name=price]").val();
+        } else {
+            params["spot"] = false;
+        }
+        params["number"] = $("input[name=number]").val();
+
+        $.post("/newmachines", params, function(data){});
+        $("input[name=price]").val("");
+        $("input[name=number]").val("");
+        $("input[name=spot]").prop('checked', false);
+        update_page();
+    });
+    $(document).on("click", ".rmhash", function(event) {
+
+        event.preventDefault();
+
+        hash = event.target.getAttribute("hashstr");
+        $.post("/cancelhash", {"hash":hash}, function(data) {
         });
-        $(document).on("click", ".rmhash", function(event) {
+        update_page();
+    });
+    $(document).on("click", ".killmach", function(event) {
 
-            event.preventDefault();
+        event.preventDefault();
 
-            hash = event.target.getAttribute("hashstr");
-            $.post("/cancelhash", {"hash":hash}, function(data) {
-            });
-            update_page();
+        uuid = event.target.getAttribute("uuid");
+        $.post("/killmachine", {"uuid":uuid}, function(data) {
         });
-        $(document).on("click", ".killmach", function(event) {
-
-            event.preventDefault();
-
-            uuid = event.target.getAttribute("uuid");
-            $.post("/killmachine", {"uuid":uuid}, function(data) {
-            });
-            update_page();
-        });
+        update_page();
     });
     </script>
 </head>
@@ -131,6 +148,11 @@
     </div>
     <div id="machines">
         Spot price: <span id="spotprice"></span>
+        <form id="requestmach">
+            Number:<input type="text" name="number">
+            Spot? <input type="checkbox" name="spot"> <input type="text" name="price">
+            <button>Request</button>
+        </form>
         <table>
         <thead>
             <tr>
