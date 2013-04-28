@@ -40,6 +40,13 @@ def complete_workshare(hash_string, share_size):
     hash_ = hashes[hash_string]
     hash_.complete_workshare(share_size)
 
+def recycle_workshare(share):
+    try:
+        hash_ = hashes[share.hashstring]
+    except KeyError:
+        return
+    hash_.recycle_share(share)
+
 def add_hash(hash_):
     if hash_ not in hashes:
         hash_queue.put(hash_)
@@ -78,6 +85,7 @@ class HashTracker:
         self.complete_state = 0
         self.complete = False
         self.password = None
+        self.recycled_workshares = []
 
     def complete_workshare(self, share):
         self.complete_state += share.size
@@ -89,10 +97,21 @@ class HashTracker:
         if self.complete:
             return None
 
+        # Check for a perfect match
+        for share in recycled_workshares:
+            if share.size == size:
+                recycled_workshares.remove(share)
+                return share
+
         if self.sent_state + size > self.source.size:
             this_sharesize = self.source.size - self.sent_state
             if this_sharesize == 0:
-                return None
+                # Check for the closest match
+                closest = None
+                for share in recycled_workshares:
+                    if abs(size - share.size) < abs(size - closest.size):
+                        closest = share
+                return closest
         else:
             this_sharesize = size
 
@@ -100,6 +119,9 @@ class HashTracker:
             self.hashtype, self.source, self.sent_state, this_sharesize)
         self.sent_state += this_sharesize
         return workshare
+
+    def recycle_share(self, share):
+        self.recycled_workshares.append(share)
 
     def complete_hash(self, password):
         self.complete = True

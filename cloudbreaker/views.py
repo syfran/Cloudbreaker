@@ -38,6 +38,37 @@ def cancel_hash_view(request):
     else:
         return HTTPBadRequest()
 
+@view_config(route_name='newmachines')
+def request_new_machine_view(request):
+    if authenticated_userid(request) is None:
+        raise HTTPForbidden()
+
+    if "spot" in request.params:
+        is_spot = request.params["spot"]
+    else 
+        is_spot = True
+    if "price" in request.params:
+        price = request.params["price"]
+    else:
+        price = None
+    if "number" in request.params:
+        number = request.params["number"]
+    else number = 1
+
+    new_instances(number, spot, price ) 
+
+@view_config(route_name='cancelmahine')
+def cancel_machine_view(request):
+    if authenticated_userid(request) is None:
+        raise HTTPForbidden()
+
+    try:
+        uuid = request.params["uuid"]
+    except KeyError:
+        return HTTPBadRequest()
+
+    kill_instance(uuid)
+
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):
     try:

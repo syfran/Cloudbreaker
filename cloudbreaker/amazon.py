@@ -28,7 +28,7 @@ def get_spot_price():
         start_time=datetime.datetime.now().isoformat())[0].price
     return price
 
-def new_instances(number, spot=True, price=None):
+def new_instances(number=1, spot=True, price=None):
     for x in range(0,number):
         machine = Machine()
         userdata = """#! /bin/bash
@@ -52,6 +52,7 @@ def new_instances(number, spot=True, price=None):
         
 def kill_instance(uuid):
     machine = machines[uuid]
+
     try:
         if machine.is_spot:
             r = conn.get_all_spot_instance_requests(request_ids=[machine.aws_id])[0]
@@ -63,4 +64,5 @@ def kill_instance(uuid):
     except boto.exception.EC2ResponseError:
         return
 
+    machine.free_workshares()
     del machine[uuid]

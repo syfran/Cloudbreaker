@@ -5,6 +5,8 @@ import time
 import datetime
 import uuid
 
+from .hashmanager import *
+
 machines = {}
 
 class Machine:
@@ -33,6 +35,10 @@ class Machine:
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
+
+    def free_workshares(self):
+        for share in self.workshares.values():
+            recycle_workshare(share)
 
     def contact(self):
         """"
