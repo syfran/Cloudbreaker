@@ -33,11 +33,11 @@ while True:
         passf.flush()
 
         dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
-            shell=True, stdout=subprocess.PIPE, stderr=sys.stderr)
+            shell=True, stdout=subprocess.PIPE, stderr=devnull)
         mangler = subprocess.Popen(john_mangle_cmd, shell=True, 
-            stdin=dict_output.stdout, stderr=sys.stderr, stdout=subprocess.PIPE)
+            stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
         john = subprocess.Popen(john_command % cmd_args, 
-            stdin=mangler.stdout, stderr=sys.stderr, stdout=sys.stderr, shell=True)
+            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         password = potf.readline().split(':')[-1][:-1]
         if password == "":
