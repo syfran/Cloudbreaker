@@ -23,7 +23,7 @@ def init_boto():
     conn = boto.ec2.connect_to_region(aws_region)
 
 def get_spot_price():
-    price = conn.get_spot_price_history(instance_type="cg1.4xlarge", 
+    price = conn.get_spot_price_history(instance_type=instance_type, 
         product_description="Linux/UNIX", 
         start_time=datetime.datetime.now().isoformat())[0].price
     return price
