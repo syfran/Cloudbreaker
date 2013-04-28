@@ -32,6 +32,7 @@ class CloudBreakerServer:
         post_params = {"uuid":self.config.get_uuid(), 
             'hash':workshare['hash'],
             'num_hashes':num_hashes,
+            'size':workshare['size'],
             'start':workshare['start']}
         if password is not None:
             post_params['password'] = password

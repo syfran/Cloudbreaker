@@ -36,6 +36,10 @@ def get_workshare(size):
     hash_queue.put(hash_)
     return share
 
+def complete_workshare(hash_string, share_size):
+    hash_ = hashes[hash_string]
+    hash_.complete_workshare(share_size)
+
 def add_hash(hash_):
     if hash_ not in hashes:
         hash_queue.put(hash_)
@@ -71,8 +75,12 @@ class HashTracker:
         self.hashtype = hashtype
         self.source = source
         self.sent_state = 0
+        self.complete_state = 0
         self.complete = False
         self.password = None
+
+    def complete_workshare(self, share):
+        self.complete_state += share.size
 
     def get_workshare(self, size):
         """
@@ -101,4 +109,5 @@ class HashTracker:
         return {
             "hash":self.hashstring,
             "password": "" if self.password is None else self.password,
+            "progress":"%d\%" % (self.complete_state /self.source.size),
             "type":self.hashtype}

@@ -68,14 +68,17 @@ def complete_workshare_view(request):
         return HTTPForbidden()
 
     try:
-        hash_string = request.params['hash'] 
-        workshare_start = request.params['start'] 
+        hash_string = request.params['hash']
+        workshare_start = request.params['start']
         num_hashes = request.params['num_hashes']
+        size = request.params['size']
     except KeyError:
         return HTTPBadRequest()
 
     if 'password' in request.params and hash_string in hashes:
         hashes[hash_string].complete_hash(request.params['password']) 
+
+    complete_workshare(hash_string, size)
         
     machine.contact()
     machine.complete_workshare(hash_string, workshare_start, num_hashes)
