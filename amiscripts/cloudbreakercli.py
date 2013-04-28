@@ -14,11 +14,14 @@ class CloudBreakerServer:
         get_workshare_addr = "http://" + self.config.get_server() + "/getshare"
         share = None
         while share is None:
-            try:
-                response = requests.post(get_workshare_addr, params=post_params)
-            except requests.ConnectionError:
-                print("Error connecting to server", file=sys.stderr)
-                return None
+            response = None
+            while response is None:
+                try:
+                    response = requests.post(get_workshare_addr, params=post_params)
+                except requests.ConnectionError:
+                    response = None
+                    time.sleep(10)
+
             share = response.json()
             if 'sleep' in share:
                 time.sleep(share['sleep'])
@@ -32,11 +35,13 @@ class CloudBreakerServer:
         if password is not None:
             post_params['password'] = password
         complete_workshare_addr = "http://" + self.config.get_server() + "/completeshare"
-        try:
-            requests.post(complete_workshare_addr, params=post_params)
-        except requests.ConnectionError:
-            print("Error connecting to server", file=sys.stderr)
-            return
+        success = None
+        while success is None:
+            try:
+                success = requests.post(complete_workshare_addr, params=post_params)
+            except requests.ConnectionError:
+                success = None
+                time.sleep(10)
 
 class CloudBreakerConf:
     def __init__(self):
