@@ -1,11 +1,16 @@
 """
 Interface with amazon ec2
 """
-
+import boto.exception
 import boto.ec2
 import datetime
+from .machines import *
 
 conn = None
+
+cloudbreaker_server_addr = "syfran.com:6543"
+instance_type = "t1.micro"
+ami_id = "ami-6f066406"
 
 def init_boto():
     """
@@ -14,7 +19,7 @@ def init_boto():
     global conn
 
     # us-east-1 and eu-west-1 are the only areas that have gpu
-    conn = boto.ec2.connect_to_region("eu-west-1")
+    conn = boto.ec2.connect_to_region("us-east-1")
 
 def get_spot_price():
     price = conn.get_spot_price_history(instance_type="cg1.4xlarge", 
@@ -22,8 +27,39 @@ def get_spot_price():
         start_time=datetime.datetime.now().isoformat())[0].price
     return price
 
-def new_instance(machinetype, price, number, uuid):
-    pass
+def new_instances(number, spot=True, price=None):
+    for x in range(0,number):
+        machine = Machine()
+        userdata = """#! /bin/bash
+                      echo "%s" > /etc/cloudbreaker.conf
+                      echo "%s" > /etc/cloudbreaker.conf""" % (cloudbreaker_server_addr, machine.uuid)
+        try:
+            if spot:
+                if price is None:
+                    price = conn.get_spot_price_history()[0].price
+                spot_requests = conn.request_spot_instances(price, 
+                    ami_id, instance_type=instance_type)
+                machine.aws_id = spot_requests[0].id
+            else:
+                instance_request = conn.run_instances(ami_id, instance_type=instance_type)
+                machine.aws_id = instance_request.id
+        except boto.exception.EC2ResponseError:
+            return
 
+        machine.is_spot = spot
+        machines[machine.uuid] = machine
+        
 def kill_instance(uuid):
-    pass
+    machine = machines[uuid]
+    try:
+        if machine.is_spot:
+            r = conn.get_all_spot_instance_requests(request_ids=[machine.aws_id])[0]
+            instance_id = r.instance_id
+            r.cancel()
+        else:
+            instance_id = machine.aws_id
+        conn.terminate_instances(instance_ids=[instance_id])
+    except boto.exception.EC2ResponseError:
+        return
+
+    del machine[uuid]
