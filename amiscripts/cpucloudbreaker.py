@@ -25,8 +25,7 @@ while True:
     cmd_args["format"] = "sha512crypt"
     cmd_args["dict"] = dict_filename
 
-    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf, 
-      tempfile.NamedTemporaryFile() as wordlist:
+    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf, tempfile.NamedTemporaryFile() as wordlist:
 
         cmd_args["passfile"] = passf.name
         cmd_args["potfile"] = potf.name
