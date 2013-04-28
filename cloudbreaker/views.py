@@ -58,7 +58,7 @@ def request_new_machine_view(request):
     else:
         number = 1
 
-    new_instances(number, is_spot, price) 
+    new_instances(number, spot=is_spot, price=price) 
 
     return Response()
 

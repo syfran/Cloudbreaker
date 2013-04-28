@@ -2,6 +2,7 @@
 Keep track of hashes and workshares
 """
 from Queue import Queue, Empty
+import time
 
 # synchronized queue of hashtrackers
 hash_queue = Queue()
@@ -98,9 +99,9 @@ class HashTracker:
             return None
 
         # Check for a perfect match
-        for share in recycled_workshares:
+        for share in self.recycled_workshares:
             if share.size == size:
-                recycled_workshares.remove(share)
+                self.recycled_workshares.remove(share)
                 return share
 
         if self.sent_state + size > self.source.size:
@@ -108,7 +109,7 @@ class HashTracker:
             if this_sharesize == 0:
                 # Check for the closest match
                 closest = None
-                for share in recycled_workshares:
+                for share in self.recycled_workshares:
                     if abs(size - share.size) < abs(size - closest.size):
                         closest = share
                 return closest

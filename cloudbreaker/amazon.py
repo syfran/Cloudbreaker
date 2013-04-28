@@ -34,16 +34,19 @@ def new_instances(number=1, spot=True, price=None):
         machine = Machine()
         userdata = """#! /bin/bash
                       echo "%s" > /etc/cloudbreaker.conf
-                      echo "%s" > /etc/cloudbreaker.conf""" % (cloudbreaker_server_addr, machine.uuid)
+                      echo "%s" >> /etc/cloudbreaker.conf""" % (cloudbreaker_server_addr, machine.uuid)
         try:
             if spot:
                 if price is None:
                     price = conn.get_spot_price_history()[0].price
+                print("Getting on spot for %d" % price)
                 spot_requests = conn.request_spot_instances(price, 
-                    ami_id, instance_type=instance_type, key_name=keypair)
+                    ami_id, instance_type=instance_type, key_name=keypair, user_data=userdata)
                 machine.aws_id = spot_requests[0].id
             else:
-                instance_request = conn.run_instances(ami_id, instance_type=instance_type, key_name=keypair)
+                print("Getting on demand (hopefully)")
+                instance_request = conn.run_instances(ami_id, instance_type=instance_type, 
+                    key_name=keypair, user_data=userdata)
                 machine.aws_id = instance_request.id
         except boto.exception.EC2ResponseError:
             return
@@ -66,4 +69,4 @@ def kill_instance(uuid):
         return
 
     machine.free_workshares()
-    del machine[uuid]
+    del machines[uuid]
