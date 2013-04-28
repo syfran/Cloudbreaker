@@ -31,12 +31,10 @@ def main(global_config, **settings):
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('root', '/')
-    config.add_route('gethashes', '/hashes')
+    config.add_route('getinfo', '/ajaxinfo')
     config.add_route('submithash', '/submit')
-    config.add_route('getmachines', '/machines')
     config.add_route('getworkshare', '/getshare')
     config.add_route('completeworkshare', '/completeshare')
-    config.add_route('getspotprice', '/spotprice')
     config.scan()
 
     init_boto()

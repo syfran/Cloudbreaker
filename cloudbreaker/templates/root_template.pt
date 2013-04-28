@@ -28,50 +28,49 @@
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-    function update_hashes() {
-        $.getJSON('/hashes', function(data) {
-            table = $('#hashes > table > tbody');
-            table.html("");
-            $.each(data, function(index, val) {
-                toapp = "<tr>";
-                toapp += "<td>" + val.hash + "</td>";
-                toapp += "<td>" + val.type + "</td>";
-                toapp += "<td>" + val.password + "</td>";
-                toapp += "</tr>";
-                table.append(toapp);
-            });
+    function update_hashes(data) {
+        table = $('#hashes > table > tbody');
+        table.html("");
+        $.each(data, function(index, val) {
+            toapp = "<tr>";
+            toapp += "<td>" + val.hash + "</td>";
+            toapp += "<td>" + val.type + "</td>";
+            toapp += "<td>" + val.password + "</td>";
+            toapp += "</tr>";
+            table.append(toapp);
         });
     }
 
-    function update_machines() {
-        $.getJSON('/machines', function(data) {
-            table = $('#machines > table > tbody');
-            table.html("");
-            $.each(data, function(index, val) {
-                toapp = "<tr>";
-                toapp += "<td>" + val.ip + "</td>";
-                toapp += "<td>" + val.workshares + "</td>";
-                toapp += "<td>" + val.openshares + "</td>";
-                toapp += "<td>" + val.lastcontact + "</td>";
-                toapp += "<td>" + val.uptime + "</td>";
-                toapp += "</tr>";
-                table.append(toapp);
-            });
+    function update_machines(data) {
+        table = $('#machines > table > tbody');
+        table.html("");
+        $.each(data, function(index, val) {
+            toapp = "<tr>";
+            toapp += "<td>" + val.ip + "</td>";
+            toapp += "<td>" + val.workshares + "</td>";
+            toapp += "<td>" + val.openshares + "</td>";
+            toapp += "<td>" + val.lastcontact + "</td>";
+            toapp += "<td>" + val.uptime + "</td>";
+            toapp += "</tr>";
+            table.append(toapp);
         });
     }
 
-    function update_spot_price() {
-        $("#spotprice").load('/spotprice')
+    function update_spot_price(data) {
+        $("#spotprice").html(data);
     }
 
     function update_page() {
-        update_hashes();
-        update_machines();
-        update_spot_price();
+        $.getJSON('/ajaxinfo', function(data) {
+            console.log(data);
+            update_hashes(data.hashes);
+            update_machines(data.machines);
+            update_spot_price(data.spotprice);
+        });
     }
 
     update_page();
-    setInterval(update_page, 5000);
+    setInterval(update_page, 3000);
 
     $(document).ready(function() {
         $("#submithashform").submit(function(event) {
