@@ -43,8 +43,8 @@ def add_hash(hash_):
         hashes[hash_.hashstring] = hash_
 
 def remove_hash(hash_):
-    if hash_.hashstring in hashes:
-        del hashes[hash_.hashstring]
+    if hash_ in hashes:
+        del hashes[hash_]
 
 class Workshare:
     """
@@ -98,6 +98,6 @@ class HashTracker:
 
     def to_dict(self):
         return {
-            "hash":self.hashstring[:10] + "..",
+            "hash":self.hashstring,
             "password": "" if self.password is None else self.password,
             "type":self.hashtype}

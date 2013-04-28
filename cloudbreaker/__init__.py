@@ -33,6 +33,7 @@ def main(global_config, **settings):
     config.add_route('root', '/')
     config.add_route('getinfo', '/ajaxinfo')
     config.add_route('submithash', '/submit')
+    config.add_route('cancelhash', '/cancelhash')
     config.add_route('getworkshare', '/getshare')
     config.add_route('completeworkshare', '/completeshare')
     config.scan()

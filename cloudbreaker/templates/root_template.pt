@@ -33,9 +33,11 @@
         table.html("");
         $.each(data, function(index, val) {
             toapp = "<tr>";
-            toapp += "<td>" + val.hash + "</td>";
+            toapp += "<td>" + val.hash.substring(0,10) + "..</td>";
             toapp += "<td>" + val.type + "</td>";
             toapp += "<td>" + val.password + "</td>";
+            toapp += "<td><a hashstr='" + val.hash + 
+                "' class='rmhash' href=''>remove</a></td>";
             toapp += "</tr>";
             table.append(toapp);
         });
@@ -62,7 +64,6 @@
 
     function update_page() {
         $.getJSON('/ajaxinfo', function(data) {
-            console.log(data);
             update_hashes(data.hashes);
             update_machines(data.machines);
             update_spot_price(data.spotprice);
@@ -70,7 +71,7 @@
     }
 
     update_page();
-    setInterval(update_page, 3000);
+    setInterval(update_page, 5000);
 
     $(document).ready(function() {
         $("#submithashform").submit(function(event) {
@@ -81,6 +82,16 @@
                         .html("An error occured submiting your hash").delay(5000).html("");}
             );
             $("input[name=hash]").val("");
+            update_page();
+        });
+        $(document).on("click", ".rmhash", function(event) {
+
+            event.preventDefault();
+
+            hash = event.target.getAttribute("hashstr");
+            $.post("/cancelhash", {"hash":hash}, function(data) {
+            });
+            update_page();
         });
     });
     </script>
@@ -119,7 +130,7 @@
     <table>
         <thead>
             <tr>
-            <th>Hash</th><th>Hash Type</th><th>Password</th>
+            <th>Hash</th><th>Hash Type</th><th>Password</th><th></th>
             </tr>
         </thead>
         <tbody>

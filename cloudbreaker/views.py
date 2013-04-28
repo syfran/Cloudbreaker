@@ -17,6 +17,19 @@ def get_hashes_view(request):
         "machines":list(map(lambda x: x.to_dict(), machines.values())), 
         "spotprice":get_spot_price()}
 
+@view_config(route_name='cancelhash')
+def cancel_hash_view(request):
+    if authenticated_userid(request) is None:
+        response = HTTPUnauthorized()
+        response.headers.update(forget(request))
+        return response
+
+    if "hash" in request.params:
+        remove_hash(request.params["hash"])
+        return Response()
+    else:
+        return HTTPBadRequest()
+
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):
     try:
