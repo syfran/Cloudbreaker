@@ -75,10 +75,10 @@ def _sec_to_string(seconds):
     days,hours = divmod(hours, 24)
     returnstr = ""
     if days != 0:
-        returnstr += "%d days " % days
+        returnstr += "%dd" % days
     if hours != 0:
-        returnstr += "%d hours " % hours
+        returnstr += "%dh" % hours
     if minutes != 0:
-        returnstr += "%d minutes " % minutes
-    returnstr += "%.1f seconds" % seconds
+        returnstr += "%dm" % minutes
+    returnstr += "%fs" % seconds
     return returnstr
