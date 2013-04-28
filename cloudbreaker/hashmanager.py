@@ -97,6 +97,6 @@ class HashTracker:
 
     def to_dict(self):
         return {
-            "hash":self.hashstring,
+            "hash":self.hashstring[:6],
             "password": "" if self.password is None else self.password,
             "type":self.hashtype}
