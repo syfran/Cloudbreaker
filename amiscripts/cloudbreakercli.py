@@ -24,7 +24,7 @@ class CloudBreakerServer:
                     response = None
                     time.sleep(10)
 
-            share = response.json()
+            share = response.json
             if 'sleep' in share:
                 time.sleep(share['sleep'])
                 share = None

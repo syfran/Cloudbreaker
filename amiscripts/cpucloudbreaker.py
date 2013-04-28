@@ -5,7 +5,7 @@ import tempfile
 from cloudbreakercli import *
 
 john_conf = "/etc/john/john.conf"
-john_bin = "/usr/sbin/john"
+john_bin = "/home/ubuntu/john-run/john"
 
 dict_filename = "english.txt"
 
