@@ -71,7 +71,7 @@
     }
 
     update_page();
-    setInterval(update_page, 1000);
+    setInterval(update_page, 5000);
 
     $(document).ready(function() {
         $("#submithashform").submit(function(event) {
