@@ -80,5 +80,5 @@ def _sec_to_string(seconds):
         returnstr += "%dh" % hours
     if minutes != 0:
         returnstr += "%dm" % minutes
-    returnstr += "%fs" % seconds
+    returnstr += "%.0fs" % seconds
     return returnstr
