@@ -28,7 +28,7 @@ class CloudBreakerServer:
                 share = None
         return share
 
-    def complete_workshare(self, workshare, num_hashes, password=None):
+    def complete_workshare(self, workshare, num_hashes, password):
         post_params = {"uuid":self.config.get_uuid(), 
             'hash':workshare['hash'],
             'num_hashes':num_hashes,

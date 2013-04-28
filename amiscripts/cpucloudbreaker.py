@@ -47,4 +47,4 @@ while True:
         if password == "":
             password = None
             num_hashes = subprocess.check_output(['wc', '-l', wordlist.name])
-        server.complete_workshare(share, password, num_hashes)
+        server.complete_workshare(share, num_hashes, password)
