@@ -58,7 +58,7 @@ def complete_workshare_view(request):
     except KeyError:
         return HTTPBadRequest()
 
-    if 'password' in request.params:
+    if 'password' in request.params and hash_string in hashes:
         hashes[hash_string].complete_hash(request.params['password']) 
         
     machine.contact()
