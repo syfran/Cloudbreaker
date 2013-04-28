@@ -7,7 +7,7 @@ from cloudbreakercli import *
 john_conf = "/etc/john/john.conf"
 john_bin = "/home/ubuntu/john-run/john"
 
-dict_filename = "english.txt"
+dict_filename = "/home/ubuntu/cain.txt"
 
 john_mangle_cmd = john_bin + " -pipe -stdout -rules"
 
