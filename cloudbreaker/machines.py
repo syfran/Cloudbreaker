@@ -71,6 +71,7 @@ class Machine:
         """
         return {
             "ip": "" if self.ipaddr is None else self.ipaddr,
+            "uuid":self.uuid,
             "workshares":self.workshares_complete,
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),

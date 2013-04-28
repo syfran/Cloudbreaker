@@ -55,6 +55,8 @@
             toapp += "<td>" + val.openshares + "</td>";
             toapp += "<td>" + val.lastcontact + "</td>";
             toapp += "<td>" + val.uptime + "</td>";
+            toapp += "<td><a href='' class='killmach' uuid='" 
+                + val.uuid + "'>kill</a>";
             toapp += "</tr>";
             table.append(toapp);
         });
@@ -95,6 +97,15 @@
             });
             update_page();
         });
+        $(document).on("click", ".killmach", function(event) {
+
+            event.preventDefault();
+
+            uuid = event.target.getAttribute("uuid");
+            $.post("/killmachine", {"uuid":uuid}, function(data) {
+            });
+            update_page();
+        });
     });
     </script>
 </head>
@@ -106,7 +117,7 @@
         <thead>
             <tr>
             <th>IP</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
-            <th>Last Contact</th><th>Uptime</th>
+            <th>Last Contact</th><th>Uptime</th><th></th>
             </tr>
         </thead>
         <tbody>

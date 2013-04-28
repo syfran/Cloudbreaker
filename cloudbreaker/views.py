@@ -57,8 +57,8 @@ def request_new_machine_view(request):
 
     new_instances(number, spot, price ) 
 
-@view_config(route_name='cancelmahine')
-def cancel_machine_view(request):
+@view_config(route_name='killmachine')
+def kill_machine_view(request):
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 

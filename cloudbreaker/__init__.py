@@ -34,6 +34,8 @@ def main(global_config, **settings):
     config.add_route('getinfo', '/ajaxinfo')
     config.add_route('submithash', '/submit')
     config.add_route('cancelhash', '/cancelhash')
+    config.add_route('killmachine', '/killmachine')
+    config.add_route('newmachines', '/newmachines')
     config.add_route('getworkshare', '/getshare')
     config.add_route('completeworkshare', '/completeshare')
     config.scan()
