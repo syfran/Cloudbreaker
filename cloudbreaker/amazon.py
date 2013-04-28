@@ -11,6 +11,7 @@ conn = None
 cloudbreaker_server_addr = "syfran.com:6543"
 instance_type = "t1.micro"
 ami_id = "ami-6f066406"
+aws_region = "us-east-1"
 
 def init_boto():
     """
@@ -19,7 +20,7 @@ def init_boto():
     global conn
 
     # us-east-1 and eu-west-1 are the only areas that have gpu
-    conn = boto.ec2.connect_to_region("us-east-1")
+    conn = boto.ec2.connect_to_region(aws_region)
 
 def get_spot_price():
     price = conn.get_spot_price_history(instance_type="cg1.4xlarge", 
