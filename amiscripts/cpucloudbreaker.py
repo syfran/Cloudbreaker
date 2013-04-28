@@ -9,7 +9,7 @@ john_bin = "/home/ubuntu/john-run/john"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
-john_mangle_cmd = john_bin + " -pipe -stdout -rules"
+john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 
@@ -29,16 +29,17 @@ while True:
 
         cmd_args["passfile"] = passf.name
         cmd_args["potfile"] = potf.name
+        cmd_args["wordlist"] = wordlist.name
 
         passf.write(share["hash"] + "\n")
         passf.flush()
 
         dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
             shell=True, stdout=subprocess.PIPE, stderr=devnull)
-        mangler = subprocess.Popen(john_mangle_cmd, shell=True, 
-            stdin=dict_output.stdout, stderr=devnull, stdout=wordlist)
+        mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
+            stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
         john = subprocess.Popen(john_command % cmd_args, 
-            stdin=wordlist, stderr=devnull, stdout=devnull, shell=True)
+            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         password = potf.readline().split(':')[-1][:-1]
 
