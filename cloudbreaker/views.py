@@ -45,17 +45,22 @@ def request_new_machine_view(request):
 
     if "spot" in request.params:
         is_spot = request.params["spot"]
-    else 
+    else: 
         is_spot = True
+
     if "price" in request.params:
-        price = request.params["price"]
+        price = float(request.params["price"])
     else:
         price = None
-    if "number" in request.params:
-        number = request.params["number"]
-    else number = 1
 
-    new_instances(number, spot, price ) 
+    if "number" in request.params:
+        number = int(request.params["number"])
+    else:
+        number = 1
+
+    new_instances(number, is_spot, price) 
+
+    return Response()
 
 @view_config(route_name='killmachine')
 def kill_machine_view(request):
@@ -68,6 +73,7 @@ def kill_machine_view(request):
         return HTTPBadRequest()
 
     kill_instance(uuid)
+    return Response()
 
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):

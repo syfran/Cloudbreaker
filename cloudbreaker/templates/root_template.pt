@@ -3,16 +3,14 @@
 <head>
     <title>Cloud Breaker</title>
     <style>
-    th {
-       padding: 15px;
-    }
-    td {
+    td, th {
         text-align:center;
+        padding-left:10px;
+        padding-right:10px;
     }
-    #submithash {
-        text-align:center;
-        margin-left:auto;
-        margin-right:auto;
+    #machines, #hashes {
+        margin-top:40px;
+        margin-bottom:40px;
     }
     #title {
         text-align:center;
@@ -67,7 +65,7 @@
     }
 
     update_page();
-    setInterval(update_page, 5000);
+    setInterval(update_page, 2000);
 
     $(document).on("submit", "#submithashform", function(event) {
         event.preventDefault();
@@ -77,14 +75,15 @@
                     .html("An error occured submiting your hash").delay(5000).html("");}
         );
         $("input[name=hash]").val("");
-        update_page();
+
+        window.setTimeout(update_page, 2000);
     });
     $(document).on("submit", "#requestmach", function(event) {
         event.preventDefault();
 
         params = {}
 
-        if($("input[name=spot]").attr('checked')) {
+        if($("input[name=spot]").prop('checked')) {
             params["spot"] = true;
             params["price"] = $("input[name=price]").val();
         } else {
@@ -96,7 +95,8 @@
         $("input[name=price]").val("");
         $("input[name=number]").val("");
         $("input[name=spot]").prop('checked', false);
-        update_page();
+
+        window.setTimeout(update_page, 2000);
     });
     $(document).on("click", ".rmhash", function(event) {
 
@@ -105,7 +105,8 @@
         hash = event.target.getAttribute("hashstr");
         $.post("/cancelhash", {"hash":hash}, function(data) {
         });
-        update_page();
+
+        window.setTimeout(update_page, 2000);
     });
     $(document).on("click", ".killmach", function(event) {
 
@@ -114,7 +115,8 @@
         uuid = event.target.getAttribute("uuid");
         $.post("/killmachine", {"uuid":uuid}, function(data) {
         });
-        update_page();
+
+        window.setTimeout(update_page, 2000);
     });
     </script>
 </head>
@@ -150,7 +152,7 @@
         Spot price: <span id="spotprice"></span>
         <form id="requestmach">
             Number:<input type="text" name="number">
-            Spot? <input type="checkbox" name="spot"> <input type="text" name="price">
+            Spot? <input type="checkbox" name="spot"> Price:<input type="text" name="price">
             <button>Request</button>
         </form>
         <table>

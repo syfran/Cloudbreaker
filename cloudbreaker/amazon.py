@@ -29,7 +29,7 @@ def get_spot_price():
     return price
 
 def new_instances(number=1, spot=True, price=None):
-    for x in range(0,number):
+    for x in range(0, number):
         machine = Machine()
         userdata = """#! /bin/bash
                       echo "%s" > /etc/cloudbreaker.conf
