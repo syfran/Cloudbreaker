@@ -9,7 +9,7 @@ class CloudBreakerServer:
     def __init__(self):
         self.config = CloudBreakerConf()
         while self.config.get_server() is None:
-            pass 
+            time.sleep(1)
 
     def get_workshare(self, workshare_size):
         post_params = {"uuid":self.config.get_uuid(), "size":workshare_size}
