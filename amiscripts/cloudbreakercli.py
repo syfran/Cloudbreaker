@@ -8,8 +8,6 @@ CONF_PATH = "/etc/cloudbreaker.conf"
 class CloudBreakerServer:
     def __init__(self):
         self.config = CloudBreakerConf()
-        while self.config.get_server() is None:
-            time.sleep(1)
 
     def get_workshare(self, workshare_size):
         post_params = {"uuid":self.config.get_uuid(), "size":workshare_size}
@@ -63,11 +61,13 @@ class CloudBreakerConf:
             pass
 
     def get_server(self):
-        if self._server is None:
+        while self._server is None:
             self._readconf()
+            time.sleep(2)
         return self._server
 
     def get_uuid(self):
-        if self._uuid is None:
+        while self._uuid is None:
             self._readconf()
+            time.sleep(2)
         return self._uuid
