@@ -42,7 +42,10 @@ while True:
             stdin=wordlist, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         password = potf.readline().split(':')[-1][:-1]
+
+        num_hashes = 0
+
         if password == "":
             password = None
-        num_hashes = subprocess.check_output(['wc', '-l', wordlist.name])
+            num_hashes = subprocess.check_output(['wc', '-l', wordlist.name])
         server.complete_workshare(share, password, num_hashes)
