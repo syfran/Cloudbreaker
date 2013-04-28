@@ -10,8 +10,9 @@ conn = None
 
 cloudbreaker_server_addr = "syfran.com:6543"
 instance_type = "t1.micro"
-ami_id = "ami-6f066406"
+ami_id = "ami-250f6d4c"
 aws_region = "us-east-1"
+keypair = "login.cs"
 
 def init_boto():
     """
@@ -39,10 +40,10 @@ def new_instances(number=1, spot=True, price=None):
                 if price is None:
                     price = conn.get_spot_price_history()[0].price
                 spot_requests = conn.request_spot_instances(price, 
-                    ami_id, instance_type=instance_type)
+                    ami_id, instance_type=instance_type, key_name=keypair)
                 machine.aws_id = spot_requests[0].id
             else:
-                instance_request = conn.run_instances(ami_id, instance_type=instance_type)
+                instance_request = conn.run_instances(ami_id, instance_type=instance_type, key_name=keypair)
                 machine.aws_id = instance_request.id
         except boto.exception.EC2ResponseError:
             return
