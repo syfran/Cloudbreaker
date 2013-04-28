@@ -49,6 +49,7 @@
         $.each(data, function(index, val) {
             toapp = "<tr>";
             toapp += "<td>" + val.ip + "</td>";
+            toapp += "<td>" + val.hashrate + " h/s</td>";
             toapp += "<td>" + val.workshares + "</td>";
             toapp += "<td>" + val.openshares + "</td>";
             toapp += "<td>" + val.lastcontact + "</td>";
@@ -103,7 +104,7 @@
         <table>
         <thead>
             <tr>
-            <th>IP</th><th>Complete Workshares</th><th>Open Workshares</th>
+            <th>IP</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
             <th>Last Contact</th><th>Uptime</th>
             </tr>
         </thead>

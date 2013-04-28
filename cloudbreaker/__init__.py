@@ -40,7 +40,7 @@ def main(global_config, **settings):
 
     init_boto()
 
-    sources['ruledict'] = PasswordSource('ruledict', "Dictionary with jtr rule mangling", 394748, 51)
+    sources['ruledict'] = PasswordSource('ruledict', "Dictionary with jtr rule mangling", 306706)
 
     testmachine = Machine()
     testmachine.uuid = "abcdef"

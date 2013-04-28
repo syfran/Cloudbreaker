@@ -19,14 +19,17 @@ class Machine:
         self.lastcontacttime = None
         self.firstcontacttime = None
         self.workshares = {}
+        self.hashrate = 0
 
-    def complete_workshare(self, workshare_hash, start):
+    def complete_workshare(self, workshare_hash, start, num_hashes):
         """
         Register completion of a workshare
         """
-        del self.workshares[(workshare_hash, int(start))]
+        workshare = self.workshares[(workshare_hash, int(start)]
         self.workshares_complete += 1
+        self.hashrate = workshare.size / (time.time() - workshare.init_time)
         self.contact()
+        del self.workshares[(workshare_hash, int(start))]
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
@@ -63,8 +66,9 @@ class Machine:
         return {
             "ip": "" if self.ipaddr is None else self.ipaddr,
             "workshares":self.workshares_complete,
-            "uptime": _sec_to_string(self.uptime()),
+            "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
+            "hashrate": "%d" % self.hashrate,
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):

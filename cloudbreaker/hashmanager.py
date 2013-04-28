@@ -13,11 +13,10 @@ sources = {}
 hashtypes = ["sha512"]
 
 class PasswordSource:
-    def __init__(self, name, fullname, size, mult):
+    def __init__(self, name, fullname, size):
         self.name = name
         self.fullname = fullname
         self.size = size
-        self.hash_multiplier = mult
 
 def get_workshare(size):
     share = None
@@ -56,6 +55,8 @@ class Workshare:
         self.passwordsource = passwordsource
         self.start = start
         self.size = size
+        self.init_time = time.time()
+
     def to_dict(self):
         return {"hash":self.hashstring, "type":self.hashtype, "source":self.passwordsource.name,
             "start":self.start, "size":self.size}

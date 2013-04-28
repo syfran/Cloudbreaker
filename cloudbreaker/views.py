@@ -70,6 +70,7 @@ def complete_workshare_view(request):
     try:
         hash_string = request.params['hash'] 
         workshare_start = request.params['start'] 
+        num_hashes = request.params['num_hashes']
     except KeyError:
         return HTTPBadRequest()
 

@@ -25,7 +25,9 @@ while True:
     cmd_args["format"] = "sha512crypt"
     cmd_args["dict"] = dict_filename
 
-    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf:
+    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf, 
+        tempfile.NamedTemporaryFile() as wordlist:
+
         cmd_args["passfile"] = passf.name
         cmd_args["potfile"] = potf.name
 
@@ -35,11 +37,12 @@ while True:
         dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
             shell=True, stdout=subprocess.PIPE, stderr=devnull)
         mangler = subprocess.Popen(john_mangle_cmd, shell=True, 
-            stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
+            stdin=dict_output.stdout, stderr=devnull, stdout=wordlist)
         john = subprocess.Popen(john_command % cmd_args, 
-            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
+            stdin=wordlist, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         password = potf.readline().split(':')[-1][:-1]
         if password == "":
             password = None
-        server.complete_workshare(share, password)
+        num_hashes = subprocess.check_output(['wc', '-l', wordlist.name])
+        server.complete_workshare(share, password, num_hashes)
