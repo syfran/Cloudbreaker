@@ -15,7 +15,7 @@ john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
 oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s --outfile-format=2 %(passfile)s"
 
-workshare_size = 5000
+workshare_size = 20000
 
 devnull = open('/dev/null', 'w')
 
@@ -42,7 +42,7 @@ while True:
         mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
             stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
         hashcat = subprocess.Popen(oclHashcat_cmd % cmd_args, 
-            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
+            stdin=mangler.stdout, stderr=sys.stderr, stdout=sys.stderr, shell=True)
         hashcat.wait()
         password = outfile.readline().strip()
 
