@@ -43,7 +43,7 @@ while True:
         mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
             stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
         john = subprocess.Popen(john_command % cmd_args, 
-            stdin=mangler.stdout, stderr=sys.stderr, stdout=sys.stderr, shell=True)
+            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         password = potf.readline().split(':')[-1][:-1]
 
