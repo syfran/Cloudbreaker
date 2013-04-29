@@ -10,7 +10,7 @@ john_session = "cpu-session"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
-john_mangle_cmd = john_bin + " -pipe -stdout -rules --session %(session)s | tee %(wordlist)s"
+john_mangle_cmd = john_bin + " -pipe -stdout -rules --session=%(session)s | tee %(wordlist)s"
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 

@@ -13,7 +13,7 @@ oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
-john_mangle_cmd = john_bin + " -pipe -stdout -rules --session %(session)s | tee %(wordlist)s"
+john_mangle_cmd = john_bin + " -pipe -stdout -rules --session=%(session)s | tee %(wordlist)s"
 
 oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s --outfile-format=2 %(passfile)s"
 
