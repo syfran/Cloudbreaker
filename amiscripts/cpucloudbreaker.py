@@ -6,11 +6,11 @@ from cloudbreakercli import *
 
 john_conf = "/etc/john/john.conf"
 john_bin = "/home/ubuntu/john-run/john"
-john_recfile = "/home/ubuntu/john-run/john.rec"
+john_session = "cpu-session"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
-john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
+john_mangle_cmd = john_bin + " -pipe -stdout -rules --session %(session)s | tee %(wordlist)s"
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 
@@ -25,6 +25,7 @@ while True:
     cmd_args = share
     cmd_args["format"] = "sha512crypt"
     cmd_args["dict"] = dict_filename
+    cmd_args["session"] = john_session
 
     with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf, tempfile.NamedTemporaryFile() as wordlist:
 
@@ -34,9 +35,6 @@ while True:
 
         passf.write(share["hash"] + "\n")
         passf.flush()
-
-        # make sure the rec file is gone
-        subprocess.call(["rm", "-f", john_recfile])
 
         dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
             shell=True, stdout=subprocess.PIPE, stderr=devnull)
