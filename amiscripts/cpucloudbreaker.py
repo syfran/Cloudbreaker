@@ -14,7 +14,7 @@ john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 
-workshare_size = 2000
+workshare_size = 5000
 
 devnull = open('/dev/null', 'w')
 
