@@ -41,7 +41,7 @@ class Machine:
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
         if self.pause_start != 0:
-            self.paused_time += time.time() - self.paused.start
+            self.paused_time += time.time() - self.pause_start
             self.paused.start = 0
 
     def free_workshares(self):
@@ -83,7 +83,7 @@ class Machine:
             "workshares":self.workshares_complete,
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
-            "hashrate": "%d hashes/s" % (self.hashes / (self.uptime() - self.paused_time)),
+            "hashrate": "%d hashes/s" % (self.hashes / (self.uptime() - self.paused_time) if self.uptime() is not None else 0),
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):
