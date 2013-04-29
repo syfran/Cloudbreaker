@@ -40,9 +40,9 @@ def new_instances(number, spot, price):
         userdata += """
                         git clone %s /home/ubuntu/cloudbreaker
                         echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                        echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" > /etc/rc.local
-                        echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" > /etc/rc.local
-                        echo "exit 0" > /etc/rc.local
+                        echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" >> /etc/rc.local
+                        echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" >> /etc/rc.local
+                        echo "exit 0" >> /etc/rc.local
                         /etc/rc.local
                     """ % cloudbreaker_git
         try:
