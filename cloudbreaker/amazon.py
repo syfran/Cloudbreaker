@@ -10,10 +10,11 @@ conn = None
 
 cloudbreaker_server_addr = "syfran.com:6543"
 instance_type = "cg1.4xlarge"
-ami_id = "ami-b57416dc"
+ami_id = "ami-4f7b1926"
 aws_region = "us-east-1"
 keypair = "login.cs"
 
+cloudbreaker_git = "http://cs.nmt.edu/~rwinkelm/cloudbreaker.git"
 def init_boto():
     """
     Establish a connection to amazon aws with our credentials
@@ -34,7 +35,16 @@ def new_instances(number, spot, price):
         machine = Machine()
         userdata = """#! /bin/bash
                       echo "%s" > /etc/cloudbreaker.conf
-                      echo "%s" >> /etc/cloudbreaker.conf""" % (cloudbreaker_server_addr, machine.uuid)
+                      echo "%s" >> /etc/cloudbreaker.conf
+                   """ % (cloudbreaker_server_addr, machine.uuid)
+        userdata += """
+                        git clone %s /home/ubuntu/cloudbreaker
+                        echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
+                        echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" > /etc/rc.local
+                        echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" > /etc/rc.local
+                        echo "exit 0" > /etc/rc.local
+                        /etc/rc.local
+                    """ % cloudbreaker_git
         try:
             if spot:
                 if price is None:
