@@ -9,7 +9,7 @@ from .machines import *
 conn = None
 
 cloudbreaker_server_addr = "syfran.com:6543"
-instance_type = "cg1.4xlarge"
+instance_type = "cc2.8xlarge"
 ami_id = "ami-4f7b1926"
 aws_region = "us-east-1"
 keypair = "login.cs"
@@ -40,7 +40,7 @@ def new_instances(number, spot, price):
         userdata += """
                         git clone %s /home/ubuntu/cloudbreaker
                         echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                        echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" >> /etc/rc.local
+                        echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" >> /dev/null
                         echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" >> /etc/rc.local
                         echo "exit 0" >> /etc/rc.local
                         /etc/rc.local
