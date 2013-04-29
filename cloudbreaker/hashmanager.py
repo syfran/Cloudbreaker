@@ -103,6 +103,7 @@ class HashTracker:
         for share in self.recycled_workshares:
             if share.size == size:
                 self.recycled_workshares.remove(share)
+                share.init_time = time.time()
                 return share
 
         if self.sent_state + size > self.source.size:
@@ -113,6 +114,7 @@ class HashTracker:
                 for share in self.recycled_workshares:
                     if abs(size - share.size) < abs(size - closest.size):
                         closest = share
+                closest.init_time = time.time()
                 return closest
         else:
             this_sharesize = size

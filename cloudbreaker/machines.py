@@ -4,6 +4,7 @@ This module is built to keep track of all the machines connected to the server
 import time
 import datetime
 import uuid
+from collections import deque
 
 from .hashmanager import *
 
@@ -21,7 +22,9 @@ class Machine:
         self.lastcontacttime = None
         self.firstcontacttime = None
         self.workshares = {}
-        self.hashrate = 0
+        self.hashes = 0
+        self.pause_start = time.time()
+        self.paused_time = 0
 
     def complete_workshare(self, workshare_hash, start, num_hashes):
         """
@@ -29,12 +32,17 @@ class Machine:
         """
         workshare = self.workshares[(workshare_hash, start)]
         self.workshares_complete += 1
-        self.hashrate = num_hashes / (time.time() - workshare.init_time)
+        self.hashes += num_hashes
         self.contact()
         del self.workshares[(workshare_hash, start)]
+        if len(self.workshares) == 0 and self.pause_start == 0:
+            self.pause_start = time.time()
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
+        if self.pause_start != 0:
+            self.paused_time += time.time() - self.paused.start
+            self.paused.start = 0
 
     def free_workshares(self):
         for share in self.workshares.values():
@@ -75,7 +83,7 @@ class Machine:
             "workshares":self.workshares_complete,
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
-            "hashrate": "%d hashes/s" % self.hashrate,
+            "hashrate": "%d hashes/s" % (self.hashes / (self.uptime() - self.paused_time)),
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):
