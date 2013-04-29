@@ -9,8 +9,8 @@ from .machines import *
 conn = None
 
 cloudbreaker_server_addr = "syfran.com:6543"
-instance_type = "t1.micro"
-ami_id = "ami-6d127004"
+instance_type = "cg1.4xlarge"
+ami_id = "ami-b57416dc"
 aws_region = "us-east-1"
 keypair = "login.cs"
 

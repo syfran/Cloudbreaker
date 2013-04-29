@@ -44,6 +44,8 @@ def main(global_config, **settings):
 
     sources['ruledict'] = PasswordSource('ruledict', "Dictionary with jtr rule mangling", 306706)
 
+    # For testing instances
+    # remove for any production
     mach = Machine()
     mach.uuid = "abcd"
     machines[mach.uuid] = mach
