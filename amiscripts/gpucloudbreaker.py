@@ -7,15 +7,15 @@ from cloudbreakercli import *
 john_conf = "/etc/john/john.conf"
 john_bin = "/home/ubuntu/john-run/john"
 
-oclHashcat_bin = "/home/ubuntu/oclHashcat"
+oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
 john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
-oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s"
+oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s --outfile-format=2 %(passfile)s"
 
-workshare_size = 30000
+workshare_size = 5000
 
 devnull = open('/dev/null', 'w')
 
@@ -51,4 +51,6 @@ while True:
         if password == "":
             password = None
             num_hashes = subprocess.check_output(['wc', '-l', wordlist.name]).split(' ')[0]
+	else:
+	    num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist.name]).split(':')[0]
         server.complete_workshare(share, num_hashes, password)
