@@ -44,4 +44,8 @@ def main(global_config, **settings):
 
     sources['ruledict'] = PasswordSource('ruledict', "Dictionary with jtr rule mangling", 306706)
 
+    mach = Machine()
+    mach.uuid = "abcd"
+    machines[mach.uuid] = mach
+
     return config.make_wsgi_app()

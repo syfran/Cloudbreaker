@@ -7,13 +7,13 @@ from cloudbreakercli import *
 john_conf = "/etc/john/john.conf"
 john_bin = "/home/ubuntu/john-run/john"
 
-oclHashcat_bin = "/home/ubuntu/oclHashcat"
+oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
 john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
-oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s"
+oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s --outfile-format=2"
 
 workshare_size = 30000
 
