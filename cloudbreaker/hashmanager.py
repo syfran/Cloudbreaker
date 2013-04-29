@@ -114,7 +114,8 @@ class HashTracker:
                 for share in self.recycled_workshares:
                     if abs(size - share.size) < abs(size - closest.size):
                         closest = share
-                closest.init_time = time.time()
+                if closest is not None:
+                    closest.init_time = time.time()
                 return closest
         else:
             this_sharesize = size
