@@ -6,6 +6,7 @@ from cloudbreakercli import *
 
 john_conf = "/etc/john/john.conf"
 john_bin = "/home/ubuntu/john-run/john"
+john_recfile = "/home/ubuntu/john-run/john.rec"
 
 oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
@@ -36,6 +37,9 @@ while True:
 
         passf.write(share["hash"] + "\n")
         passf.flush()
+
+        # make sure the rec file is gone
+        subprocess.call(["rm", "-f", john_recfile])
 
         dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
             shell=True, stdout=subprocess.PIPE, stderr=devnull)
