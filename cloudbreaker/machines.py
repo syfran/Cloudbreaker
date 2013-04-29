@@ -42,7 +42,7 @@ class Machine:
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
         if self.pause_start != 0:
             self.paused_time += time.time() - self.pause_start
-            self.paused.start = 0
+            self.pause_start = 0
 
     def free_workshares(self):
         for share in self.workshares.values():
