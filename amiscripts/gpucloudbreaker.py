@@ -42,7 +42,7 @@ while True:
         mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
             stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
         hashcat = subprocess.Popen(oclHashcat_cmd % cmd_args, 
-            stdin=mangler.stdout, stderr=sys.stderr, stdout=sys.stderr, shell=True)
+            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
         hashcat.wait()
         password = outfile.readline().strip()
 

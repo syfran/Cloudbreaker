@@ -77,6 +77,7 @@ class Machine:
         """
         Return a dictionary representation of this object
         """
+        print(self.paused_time)
         return {
             "ip": "" if self.ipaddr is None else self.ipaddr,
             "uuid":self.uuid,
