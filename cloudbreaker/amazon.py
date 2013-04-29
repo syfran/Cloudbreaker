@@ -10,7 +10,7 @@ conn = None
 
 cloudbreaker_server_addr = "syfran.com:6543"
 instance_type = "t1.micro"
-ami_id = "ami-250f6d4c"
+ami_id = "ami-6d127004"
 aws_region = "us-east-1"
 keypair = "login.cs"
 
