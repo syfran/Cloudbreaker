@@ -23,20 +23,37 @@ class Machine:
         self.firstcontacttime = None
         self.workshares = {}
         self.hashes = 0
+        self.hashrate = 0
         self.pause_start = time.time()
         self.paused_time = 0
+
+    def calc_hashrate(self):
+        uptime = self.uptime()
+        if uptime is None:
+            self.hashrate = 0
+
+        now = time.time()
+        if self.pause_start != 0:
+            self.paused_time += now - self.pause_start
+            self.pause_start = now
+        self.hashrate = self.hashes / uptime - self.paused_time
 
     def complete_workshare(self, workshare_hash, start, num_hashes):
         """
         Register completion of a workshare
         """
-        workshare = self.workshares[(workshare_hash, start)]
+        try:
+            workshare = self.workshares[(workshare_hash, start)]
+        except KeyError:
+            return None
+
         self.workshares_complete += 1
         self.hashes += num_hashes
         self.contact()
         del self.workshares[(workshare_hash, start)]
         if len(self.workshares) == 0 and self.pause_start == 0:
             self.pause_start = time.time()
+        self.calc_hashrate()
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
@@ -55,6 +72,7 @@ class Machine:
         now = time.time()
         if self.firstcontacttime is None:
             self.firstcontacttime = now
+            self.pause_start = time.time()
         self.lastcontacttime = now
 
     def uptime(self):
@@ -77,14 +95,13 @@ class Machine:
         """
         Return a dictionary representation of this object
         """
-        print(self.paused_time)
         return {
             "ip": "" if self.ipaddr is None else self.ipaddr,
             "uuid":self.uuid,
             "workshares":self.workshares_complete,
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
-            "hashrate": "%d hashes/s" % (self.hashes / (self.uptime() - self.paused_time) if self.uptime() is not None else 0),
+            "hashrate": "%d hashes/s" % self.hashrate,
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):
