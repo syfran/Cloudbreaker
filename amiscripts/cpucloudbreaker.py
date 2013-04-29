@@ -48,4 +48,6 @@ while True:
         if password == "":
             password = None
             num_hashes = subprocess.check_output(['wc', '-l', wordlist.name]).split(' ')[0]
+        else:
+            num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist.name]).split(':')[0]
         server.complete_workshare(share, num_hashes, password)
