@@ -27,11 +27,11 @@ class Machine:
         """
         Register completion of a workshare
         """
-        workshare = self.workshares[(workshare_hash, int(start))]
+        workshare = self.workshares[(workshare_hash, start)]
         self.workshares_complete += 1
-        self.hashrate = workshare.size / (time.time() - workshare.init_time)
+        self.hashrate = num_hashes / (time.time() - workshare.init_time)
         self.contact()
-        del self.workshares[(workshare_hash, int(start))]
+        del self.workshares[(workshare_hash, start)]
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare

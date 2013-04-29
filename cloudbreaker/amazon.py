@@ -29,7 +29,7 @@ def get_spot_price():
         start_time=datetime.datetime.now().isoformat())[0].price
     return price
 
-def new_instances(number=1, spot=True, price=None):
+def new_instances(number, spot, price):
     for x in range(0, number):
         machine = Machine()
         userdata = """#! /bin/bash
@@ -47,7 +47,7 @@ def new_instances(number=1, spot=True, price=None):
                 print("Getting on demand (hopefully)")
                 instance_request = conn.run_instances(ami_id, instance_type=instance_type, 
                     key_name=keypair, user_data=userdata)
-                machine.aws_id = instance_request.id
+                machine.aws_id = instance_request.instances[0].id
         except boto.exception.EC2ResponseError:
             return
 

@@ -38,8 +38,9 @@ def get_workshare(size):
     return share
 
 def complete_workshare(hash_string, share_size):
-    hash_ = hashes[hash_string]
-    hash_.complete_workshare(share_size)
+    if hash_string in hashes:
+        hash_ = hashes[hash_string]
+        hash_.complete_workshare(share_size)
 
 def recycle_workshare(share):
     try:
@@ -88,8 +89,8 @@ class HashTracker:
         self.password = None
         self.recycled_workshares = []
 
-    def complete_workshare(self, share):
-        self.complete_state += share.size
+    def complete_workshare(self, share_size):
+        self.complete_state += share_size
 
     def get_workshare(self, size):
         """
@@ -132,5 +133,5 @@ class HashTracker:
         return {
             "hash":self.hashstring,
             "password": "" if self.password is None else self.password,
-            "progress":"%d%%" % (self.complete_state /self.source.size),
+            "progress":"%.1f%%" % ((self.complete_state* 100.0) /self.source.size),
             "type":self.hashtype}

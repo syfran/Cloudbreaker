@@ -44,7 +44,7 @@ def request_new_machine_view(request):
         raise HTTPForbidden()
 
     if "spot" in request.params:
-        is_spot = request.params["spot"]
+        is_spot = request.params["spot"] == "true"
     else: 
         is_spot = True
 
@@ -58,7 +58,7 @@ def request_new_machine_view(request):
     else:
         number = 1
 
-    new_instances(number, spot=is_spot, price=price) 
+    new_instances(number, is_spot, price) 
 
     return Response()
 
@@ -106,9 +106,9 @@ def complete_workshare_view(request):
 
     try:
         hash_string = request.params['hash']
-        workshare_start = request.params['start']
-        num_hashes = request.params['num_hashes']
-        size = request.params['size']
+        workshare_start = int(request.params['start'])
+        num_hashes = int(request.params['num_hashes'].split(' ')[0])
+        size = int(request.params['size'])
     except KeyError:
         return HTTPBadRequest()
 
