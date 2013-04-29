@@ -13,7 +13,7 @@ john_mangle_cmd = john_bin + " -pipe -stdout -rules | tee %(wordlist)s"
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 
-workshare_size = 100
+workshare_size = 500
 
 devnull = open('/dev/null', 'w')
 
@@ -47,5 +47,5 @@ while True:
 
         if password == "":
             password = None
-            num_hashes = subprocess.check_output(['wc', '-l', wordlist.name])
+            num_hashes = subprocess.check_output(['wc', '-l', wordlist.name]).split(' ')[0]
         server.complete_workshare(share, num_hashes, password)
