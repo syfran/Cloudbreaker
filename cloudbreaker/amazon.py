@@ -94,7 +94,7 @@ def kill_instance(uuid):
             instance_id = machine.aws_id
         conn.terminate_instances(instance_ids=[instance_id])
     except boto.exception.EC2ResponseError:
-        return
+        pass
 
     machine.free_workshares()
     del machines[uuid]
