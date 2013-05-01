@@ -7,7 +7,6 @@ import uuid
 from collections import deque
 
 from .hashmanager import *
-from .amazon import *
 
 machines = {}
 
@@ -27,7 +26,7 @@ class Machine:
         self.hashrate = 0
         self.pause_start = time.time()
         self.paused_time = 0
-        self.type = instance_type
+        self.instance_type = instance_type
 
     def calc_hashrate(self):
         uptime = self.uptime()
@@ -104,7 +103,7 @@ class Machine:
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
             "hashrate": "%d hashes/s" % self.hashrate,
-            "type": instance_types[self.type][0],
+            "type": self.instance_type,
             "lastcontact": _sec_to_string(self.lastcontact())}
 
 def _sec_to_string(seconds):

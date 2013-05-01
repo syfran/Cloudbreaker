@@ -4,6 +4,7 @@ Interface with amazon ec2
 import boto.exception
 import boto.ec2
 import datetime
+
 from .machines import *
 
 conn = None
@@ -57,7 +58,8 @@ def get_spot_price(instance_type):
 
 def new_instances(number, spot, price, instance_type):
     for x in range(0, number):
-        machine = Machine(instance_type)
+        machine = Machine(instance_types[instance_type][0])
+
         # lookup user data and ami based on instance type
         userdata = instance_types[instance_type][2] % (cloudbreaker_server_addr, machine.uuid, cloudbreaker_git)
         ami_id = instance_types[instance_type][1]
