@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import tempfile
+import multiprocessing
 
 from cloudbreakercli import *
 
@@ -14,7 +15,10 @@ john_mangle_cmd = john_bin + " -pipe -stdout -rules --session=%(session)s | tee 
 
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s %(passfile)s"
 
-workshare_size = 5000
+if multiprocessing.cpu_count() > 2:
+    workshare_size = 5000
+else:
+    workshare_size = 300
 
 devnull = open('/dev/null', 'w')
 
