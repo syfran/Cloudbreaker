@@ -31,6 +31,8 @@ gpu_userdata =     """#! /bin/bash
                       echo "exit 0" >> /etc/rc.local
                       /etc/rc.local
                     """
+# Key is the amazon name
+# value is (user friendly anem, ami_id, userdata)
 instance_types = {
     "t1.micro":("Free Tier", cpu_ami, cpu_userdata),
     "cc2.8xlarge":("Cluster cpu", cluster_ami, cpu_userdata),
@@ -58,7 +60,7 @@ def get_spot_price(instance_type):
 
 def new_instances(number, spot, price, instance_type):
     for x in range(0, number):
-        machine = Machine(instance_types[instance_type][0])
+        machine = Machine(instance_type)
 
         # lookup user data and ami based on instance type
         userdata = instance_types[instance_type][2] % (cloudbreaker_server_addr, machine.uuid, cloudbreaker_git)

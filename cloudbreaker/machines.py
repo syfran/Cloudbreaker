@@ -103,8 +103,10 @@ class Machine:
             "uptime":_sec_to_string(self.uptime()),
             "openshares":len(self.workshares),
             "hashrate": "%d hashes/s" % self.hashrate,
-            "type": self.instance_type,
+            "type": instance_types[self.instance_type][0],
             "lastcontact": _sec_to_string(self.lastcontact())}
+
+from .amazon import instance_types
 
 def _sec_to_string(seconds):
     if seconds is None:
@@ -121,3 +123,4 @@ def _sec_to_string(seconds):
         returnstr += "%dm" % minutes
     returnstr += "%.0fs" % seconds
     return returnstr
+
