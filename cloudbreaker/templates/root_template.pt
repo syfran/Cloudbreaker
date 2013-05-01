@@ -40,6 +40,7 @@
         $.each(data, function(index, val) {
             toapp = "<tr>";
             toapp += "<td>" + val.ip + "</td>";
+            toapp += "<td>" + val.type + "</td>";
             toapp += "<td>" + val.hashrate + "</td>";
             toapp += "<td>" + val.workshares + "</td>";
             toapp += "<td>" + val.openshares + "</td>";
@@ -57,7 +58,9 @@
     }
 
     function update_page() {
-        $.getJSON('/ajaxinfo', function(data) {
+        params = {}
+        params["instance_type"] = $("select[name=instance_type]").val();
+        $.getJSON('/ajaxinfo', params, function(data) {
             update_hashes(data.hashes);
             update_machines(data.machines);
             update_spot_price(data.spotprice);
@@ -65,7 +68,7 @@
     }
 
     update_page();
-    setInterval(update_page, 2000);
+    setInterval(update_page, 1000);
 
     $(document).on("submit", "#submithashform", function(event) {
         event.preventDefault();
@@ -90,8 +93,10 @@
             params["spot"] = false;
         }
         params["number"] = $("input[name=number]").val();
+        params["instance_type"] = $("select[name=instance_type]").val();
 
         $.post("/newmachines", params, function(data){});
+        $("input[name=instance_type]").val("");
         $("input[name=price]").val("");
         $("input[name=number]").val("");
         $("input[name=spot]").prop('checked', false);
@@ -118,6 +123,7 @@
 
         window.setTimeout(update_page, 2000);
     });
+    $(document).on("change", "#instance_type", update_page);
     </script>
 </head>
 <body>
@@ -127,7 +133,7 @@
         <form id="submithashform">
             Add a new hash:
             <input type='text' name="hash">
-            <select name="type">
+            <select name="hash_type">
                 <option tal:repeat="hashtype hashtypes" value="${hashtype}">${hashtype}</option>
             </select>
             <select name="source">
@@ -151,6 +157,10 @@
     <div id="machines">
         Spot price: <span id="spotprice"></span>
         <form id="requestmach">
+            Type: <select name="instance_type" id="instance_type">
+                    <option tal:repeat="instance_type instance_types" value="${instance_type['instance_type']}">                        ${instance_type['type_name']}
+                    </option>
+                   </select>
             Number:<input type="text" name="number">
             Spot? <input type="checkbox" name="spot"> Price:<input type="text" name="price">
             <button>Request</button>
@@ -158,7 +168,7 @@
         <table>
         <thead>
             <tr>
-            <th>IP</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
+            <th>IP</th><th>type</th><th>Hash Rate</th><th>Complete Workshares</th><th>Open Workshares</th>
             <th>Last Contact</th><th>Uptime</th><th></th>
             </tr>
         </thead>

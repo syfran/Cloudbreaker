@@ -17,15 +17,28 @@ def auth_test(request):
 def root_view(request):
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
-    return {"sources":sources.keys(), "hashtypes":hashtypes}
+    return {"sources":sources.keys(), "hashtypes":hashtypes, 
+        "instance_types":list(map(
+            lambda x: {"instance_type":x[0], "type_name":x[1][0]}, 
+            instance_types.items()))}
 
 @view_config(route_name='getinfo', renderer='json')
-def get_hashes_view(request):
+def get_info_view(request):
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
+
+    if "instance_type" in request.params:
+        instance_type = request.params["instance_type"]
+        spotprice = get_spot_price(instance_type)
+    else:
+        spotprice = "0"
+        
+    
+        return HTTPBadRequest()
+        
     return {"hashes":list(map(lambda x: x.to_dict(), hashes.values())),
         "machines":list(map(lambda x: x.to_dict(), machines.values())), 
-        "spotprice":get_spot_price()}
+        "spotprice":spotprice}
 
 @view_config(route_name='cancelhash')
 def cancel_hash_view(request):
@@ -43,22 +56,19 @@ def request_new_machine_view(request):
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 
-    if "spot" in request.params:
+    try:
         is_spot = request.params["spot"] == "true"
-    else: 
-        is_spot = True
+        number = int(request.params["number"])
+        instance_type = request.params["instance_type"]
+    except KeyError:
+        return HTTPBadRequest()
 
     if "price" in request.params:
         price = float(request.params["price"])
     else:
         price = None
 
-    if "number" in request.params:
-        number = int(request.params["number"])
-    else:
-        number = 1
-
-    new_instances(number, is_spot, price) 
+    new_instances(number, is_spot, price, instance_type)
 
     return Response()
 
@@ -128,7 +138,7 @@ def submithash_view(request):
 
     try:
         hashstring = request.params['hash']
-        hashtype = request.params['type'] 
+        hashtype = request.params['hash_type'] 
         sourcename = request.params['source']
     except KeyError: 
         return HTTPBadRequest()

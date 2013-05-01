@@ -46,7 +46,7 @@ def main(global_config, **settings):
 
     # For testing instances
     # remove for any production
-    mach = Machine()
+    mach = Machine("t1.micro")
     mach.uuid = "abcd"
     machines[mach.uuid] = mach
 
