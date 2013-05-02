@@ -48,6 +48,7 @@ def main(global_config, **settings):
     # remove for any production
     mach = Machine("t1.micro")
     mach.uuid = "abcd"
+    mach.is_spot = True
     machines[mach.uuid] = mach
 
     return config.make_wsgi_app()
