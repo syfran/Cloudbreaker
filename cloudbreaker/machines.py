@@ -24,8 +24,8 @@ class Machine:
         self.workshares = {}
         self.hashes = 0
         self.hashrate = 0
-        self.pause_start = time.time()
-        self.paused_time = 0
+        self.work_start = 0
+        self.work_time = 0
         self.instance_type = instance_type
 
     def calc_hashrate(self):
@@ -34,10 +34,10 @@ class Machine:
             self.hashrate = 0
 
         now = time.time()
-        if self.pause_start != 0:
-            self.paused_time += now - self.pause_start
-            self.pause_start = now
-        self.hashrate = self.hashes / uptime - self.paused_time
+        if self.work_start != 0:
+            self.work_time += now - self.work_start
+            self.work_start = now
+        self.hashrate = self.hashes / self.work_time
 
     def complete_workshare(self, workshare_hash, start, num_hashes):
         """
@@ -52,15 +52,15 @@ class Machine:
         self.hashes += num_hashes
         self.contact()
         del self.workshares[(workshare_hash, start)]
-        if len(self.workshares) == 0 and self.pause_start == 0:
-            self.pause_start = time.time()
+        if len(self.workshares) == 0:
+            self.work_time += now - self.work_start
+            self.work_start = 0
         self.calc_hashrate()
 
     def add_workshare(self, workshare):
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
-        if self.pause_start != 0:
-            self.paused_time += time.time() - self.pause_start
-            self.pause_start = 0
+        if self.work_start == 0:
+            self.work_start = time.time()
 
     def free_workshares(self):
         for share in self.workshares.values():
@@ -73,7 +73,7 @@ class Machine:
         now = time.time()
         if self.firstcontacttime is None:
             self.firstcontacttime = now
-            self.pause_start = time.time()
+
         self.lastcontacttime = now
 
     def uptime(self):
