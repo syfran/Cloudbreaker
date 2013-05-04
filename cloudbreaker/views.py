@@ -33,9 +33,6 @@ def get_info_view(request):
     else:
         spotprice = "0"
         
-    
-        return HTTPBadRequest()
-        
     return {"hashes":list(map(lambda x: x.to_dict(), hashes.values())),
         "machines":list(map(lambda x: x.to_dict(), machines.values())), 
         "spotprice":spotprice}
