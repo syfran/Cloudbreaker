@@ -30,7 +30,7 @@ def get_workshare(size):
             return None
 
         if hash_.hashstring not in hashes:
-            return None
+            continue
 
         share = hash_.get_workshare(size)
 
