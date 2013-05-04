@@ -1,3 +1,6 @@
+"""
+This module contains all possible HTTP pages
+"""
 from pyramid.view import view_config
 from pyramid.httpexceptions import *
 from pyramid.response import Response
@@ -9,12 +12,18 @@ from .amazon import *
 
 @view_config(context=HTTPForbidden)
 def auth_test(request):
+    """
+    If a view raises HTTPForbidden this will force a password prompt
+    """
     response = HTTPUnauthorized()
     response.headers.update(forget(request))
     return response
 
 @view_config(route_name='root', renderer='templates/root_template.pt')
 def root_view(request):
+    """
+    This will display the main page
+    """
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
     return {"sources":sources.keys(), "hashtypes":hashtypes, 
@@ -24,6 +33,10 @@ def root_view(request):
 
 @view_config(route_name='getinfo', renderer='json')
 def get_info_view(request):
+    """
+    This page is designed to be called by an Ajax request and return all
+    information for the interface
+    """
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 
@@ -39,6 +52,9 @@ def get_info_view(request):
 
 @view_config(route_name='cancelhash')
 def cancel_hash_view(request):
+    """
+    Remove the given hash from our hashlist
+    """
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 
@@ -50,6 +66,9 @@ def cancel_hash_view(request):
 
 @view_config(route_name='newmachines')
 def request_new_machine_view(request):
+    """
+    Request new amazon instances
+    """
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 
@@ -71,6 +90,9 @@ def request_new_machine_view(request):
 
 @view_config(route_name='killmachine')
 def kill_machine_view(request):
+    """
+    Terminate the given machine
+    """
     if authenticated_userid(request) is None:
         raise HTTPForbidden()
 
@@ -82,16 +104,46 @@ def kill_machine_view(request):
     kill_instance(uuid)
     return Response()
 
+@view_config(route_name='submithash')
+def submithash_view(request):
+    """
+    Submit a new hash to be cracked
+    """
+    if authenticated_userid(request) is None:
+        raise HTTPForbidden()
+
+    try:
+        hashstring = request.params['hash']
+        hashtype = request.params['hash_type'] 
+        sourcename = request.params['source']
+    except KeyError: 
+        return HTTPBadRequest()
+
+    hash_ = HashTracker(hashstring, hashtype, sources[sourcename])
+    add_hash(hash_)
+    return Response()
+
+#
+# The following functions are designed to be called by clients
+#
+
 @view_config(route_name='getworkshare', renderer='json')
 def get_workshare_view(request):
+    """
+    Get a new workshare for the requesting client
+    """
+    # If a valid uuid isn't included then fail
     try:
         uuid = request.params['uuid']
         machine = machines[uuid]
     except KeyError:
         return HTTPForbidden()
 
+    # Register a contact from the client
     machine.ipaddr = request.client_addr
     machine.contact()
+
+    # If the client didn't request a size, default to 30k
     try:
         size = request.params['size']
     except KeyError:
@@ -101,10 +153,15 @@ def get_workshare_view(request):
         machine.add_workshare(share)
         return share.to_dict()
     else:
+        # If we don't have a share, then just sleep for 10 seconds
         return {"sleep":10}
 
 @view_config(route_name='completeworkshare')
 def complete_workshare_view(request):
+    """
+    Set workshare as complete
+    """
+    # Fail if no valid UUID is provided
     try:
         uuid = request.params['uuid']
         machine = machines[uuid]
@@ -119,6 +176,7 @@ def complete_workshare_view(request):
     except KeyError:
         return HTTPBadRequest()
 
+    # If we found a password, set the hash as complete
     if 'password' in request.params and hash_string in hashes:
         hashes[hash_string].complete_hash(request.params['password']) 
 
@@ -126,19 +184,4 @@ def complete_workshare_view(request):
         
     machine.contact()
     machine.complete_workshare(hash_string, workshare_start, num_hashes)
-    return Response()
-
-@view_config(route_name='submithash')
-def submithash_view(request):
-    if authenticated_userid(request) is None:
-        raise HTTPForbidden()
-
-    try:
-        hashstring = request.params['hash']
-        hashtype = request.params['hash_type'] 
-        sourcename = request.params['source']
-    except KeyError: 
-        return HTTPBadRequest()
-    hash_ = HashTracker(hashstring, hashtype, sources[sourcename])
-    add_hash(hash_)
     return Response()

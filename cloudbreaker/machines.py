@@ -8,6 +8,7 @@ from collections import deque
 
 from .hashmanager import *
 
+# Dictionary with the machine's UUID as the key
 machines = {}
 
 class Machine:
@@ -28,12 +29,17 @@ class Machine:
         self.work_time = 0
         self.instance_type = instance_type
 
-    def calc_hashrate(self):
+    def _calc_hashrate(self):
+        """
+        Recalculate the hashrate and store it in self.hashrate
+        """
         uptime = self.uptime()
+        # We haven't initialized yet
         if uptime is None:
             self.hashrate = 0
 
         now = time.time()
+        # If we are currently working update the cummulative work time
         if self.work_start != 0:
             self.work_time += now - self.work_start
             self.work_start = now
@@ -52,17 +58,27 @@ class Machine:
         self.hashes += num_hashes
         self.contact()
         del self.workshares[(workshare_hash, start)]
+
+        # We are no longer working, so we will update work_time and set
+        # work_start to 0
         if len(self.workshares) == 0:
             self.work_time += now - self.work_start
             self.work_start = 0
-        self.calc_hashrate()
+        self._calc_hashrate()
 
     def add_workshare(self, workshare):
+        """
+        Assign a new workshare to this machine
+        """
         self.workshares[(workshare.hashstring, workshare.start)] = workshare
+        # If we're not already working, then start
         if self.work_start == 0:
             self.work_start = time.time()
 
     def free_workshares(self):
+        """
+        Recycle all currently active workshares on this machine
+        """
         for share in self.workshares.values():
             recycle_workshare(share)
 
@@ -106,8 +122,10 @@ class Machine:
             "type": instance_types[self.instance_type][0],
             "lastcontact": _sec_to_string(self.lastcontact())}
 
+# We have to import this here to prevent a circular dependency
 from .amazon import instance_types
 
+# Simple method for turning a time in seconds into a human friendly format
 def _sec_to_string(seconds):
     if seconds is None:
         return "Never"
@@ -123,4 +141,3 @@ def _sec_to_string(seconds):
         returnstr += "%dm" % minutes
     returnstr += "%.0fs" % seconds
     return returnstr
-
