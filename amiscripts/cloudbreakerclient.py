@@ -82,28 +82,24 @@ class CloudBreakerConf:
         """
         Try to read in the configuration file
         """
-        try:
-            with open(CONF_PATH, 'r') as conffile:
-                self._server = conffile.readline().strip()
-                self._uuid = conffile.readline().strip()
-                self.exists = True
-        except IOError:
-            pass
+        while not self.exists:
+            try:
+                with open(CONF_PATH, 'r') as conffile:
+                    self._server = conffile.readline().strip()
+                    self._uuid = conffile.readline().strip()
+                    self.exists = True
+            except IOError:
+                slef.exists = False
+                time.sleep(2)
 
     def get_server(self):
         """
         Get the server name
         """
-        while self._server is None:
-            self._readconf()
-            time.sleep(2)
         return self._server
 
     def get_uuid(self):
         """
         Get the UUID
         """
-        while self._uuid is None:
-            self._readconf()
-            time.sleep(2)
         return self._uuid
