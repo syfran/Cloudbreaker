@@ -7,7 +7,7 @@ import time
 
 from .config import server_addr, machine_uuid, load_config
 
-class CloudBreakerServer:
+class CloudbreakerServer:
     """ 
     This class provides two method for interacting with the server using the
     requests library

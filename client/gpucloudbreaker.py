@@ -5,7 +5,7 @@ import subprocess
 import sys
 import tempfile
 
-from cloudbreakercli import *
+from .server import CloudbreakerServer
 
 # General configuration
 john_conf = "/etc/john/john.conf"
@@ -25,7 +25,7 @@ workshare_size = 20000
 
 devnull = open('/dev/null', 'w')
 
-server = CloudBreakerServer()
+server = CloudbreakerServer()
 while True:
     share = server.get_workshare(workshare_size)
 

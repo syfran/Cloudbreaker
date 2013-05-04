@@ -6,7 +6,7 @@ import sys
 import tempfile
 import multiprocessing
 
-from cloudbreakercli import *
+from .server import CloudbreakerServer
 
 # General configuration
 john_conf = "/etc/john/john.conf"
