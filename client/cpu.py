@@ -8,6 +8,7 @@ import multiprocessing
 
 from .server import CloudbreakerServer
 from .config import john_conf, john_bin
+from .wordlist import Wordlist
 
 # General configuration
 john_session = "cpu-session"
@@ -34,30 +35,25 @@ while True:
     # These will be used to fill in the various commands
     cmd_args = share
     cmd_args["format"] = "sha512crypt"
-    cmd_args["dict"] = dict_filename
     cmd_args["session"] = john_session
 
     # Generate a bunch of temporary files to write to, they are automatically
     # deleted on close
-    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as potf, tempfile.NamedTemporaryFile() as wordlist:
+    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() \
+        as potf, tempfile.NamedTemporaryFile() as wordlist_output:
 
         cmd_args["passfile"] = passf.name
         cmd_args["potfile"] = potf.name
-        cmd_args["wordlist"] = wordlist.name
 
         # Write the hash to our passsword file
         passf.write(share["hash"] + "\n")
         passf.flush()
 
-        # Get a slice of the wordlist
-        dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
-            shell=True, stdout=subprocess.PIPE, stderr=devnull)
-        # Pass the slice through a rule based mangler
-        mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
-            stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
+        wordlist = Wordlist("cain", share["start"], share["size"], john_session)
+        mangler_out = wordlist.get_pipe(wordlist_output)
         # Run john the ripper on it
         john = subprocess.Popen(john_command % cmd_args, 
-            stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
+            stdin=mangler_out, stderr=devnull, stdout=devnull, shell=True)
         john.wait()
         # See if there is anything in the pot file
         password = potf.readline().split(':')[-1][:-1]
