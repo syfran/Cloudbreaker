@@ -42,7 +42,7 @@ cloudbreaker_server_addr = "syfran.com:6543"
 aws_region = "us-east-1"
 keypair = "login.cs"
 
-cloudbreaker_git = "http://cs.nmt.edu/~rwinkelm/cloudbreaker.git"
+cloudbreaker_git = "git://github.com/syfran/Cloudbreaker.git"
 def init_boto():
     """
     Establish a connection to amazon aws with our credentials
