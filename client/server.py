@@ -5,7 +5,7 @@ import requests
 import sys
 import time
 
-CONF_PATH = "/etc/cloudbreaker.conf"
+from .config import server_addr, machine_uuid, load_config
 
 class CloudBreakerServer:
     """ 
@@ -16,14 +16,14 @@ class CloudBreakerServer:
         """
         Read in the configuration file
         """
-        self.config = CloudBreakerConf()
+        load_config()
 
     def get_workshare(self, workshare_size):
         """
         Get a new workshare from the server of the given size
         """
-        post_params = {"uuid":self.config.get_uuid(), "size":workshare_size}
-        get_workshare_addr = "http://" + self.config.get_server() + "/getshare"
+        post_params = {"uuid":machine_uuid, "size":workshare_size}
+        get_workshare_addr = "http://" + server_addr + "/getshare"
         share = None
         # Continue to request shares until we get one
         while share is None:
@@ -36,7 +36,7 @@ class CloudBreakerServer:
                     time.sleep(10)
 
             share = response.json
-                share = None
+            share = None
             # If the server sent sleep or we don't have a request, then sleep
             if share is None:
                 time.sleep(10)
@@ -50,14 +50,14 @@ class CloudBreakerServer:
         Tell the server that we have completed the workshare password should be
         set to None if one hasn't been found
         """
-        post_params = {"uuid":self.config.get_uuid(), 
+        post_params = {"uuid":machine_uuid, 
             'hash':workshare['hash'],
             'num_hashes':num_hashes,
             'size':workshare['size'],
             'start':workshare['start']}
         if password is not None:
             post_params['password'] = password
-        complete_workshare_addr = "http://" + self.config.get_server() + "/completeshare"
+        complete_workshare_addr = "http://" + server_addr + "/completeshare"
         success = None
         # Continue to try to submit until we get the server
         while success is None:
@@ -67,39 +67,3 @@ class CloudBreakerServer:
                 success = None
                 time.sleep(10)
 
-class CloudBreakerConf:
-    """
-    This class provides methods to read variables fromn the configuration file
-    """
-    def __init__(self):
-        self._server = None
-        self._uuid = None
-        self.exists = False
-
-        self._readconf()
-
-    def _readconf(self):
-        """
-        Try to read in the configuration file
-        """
-        while not self.exists:
-            try:
-                with open(CONF_PATH, 'r') as conffile:
-                    self._server = conffile.readline().strip()
-                    self._uuid = conffile.readline().strip()
-                    self.exists = True
-            except IOError:
-                slef.exists = False
-                time.sleep(2)
-
-    def get_server(self):
-        """
-        Get the server name
-        """
-        return self._server
-
-    def get_uuid(self):
-        """
-        Get the UUID
-        """
-        return self._uuid
