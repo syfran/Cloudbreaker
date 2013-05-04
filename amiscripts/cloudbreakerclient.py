@@ -1,7 +1,6 @@
 """
 This module provides function for interacting with the server
 """
-from __future__ import print_function
 import requests
 import sys
 import time
