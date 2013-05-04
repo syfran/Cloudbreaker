@@ -16,11 +16,6 @@ def check_env_auth(username, password, request):
         return []
     return None
 
-    response = HTTPUnauthorized()
-    response.headers.update(forget(request))
-    return response
-
-
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
