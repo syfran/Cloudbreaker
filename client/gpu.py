@@ -6,14 +6,10 @@ import sys
 import tempfile
 
 from .server import CloudbreakerServer
+from .config import john_bin, john_conf, oclHashcat_bin
 
 # General configuration
-john_conf = "/etc/john/john.conf"
-john_bin = "/home/ubuntu/john-run/john"
-
 john_session = "gpu-session"
-
-oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
 dict_filename = "/home/ubuntu/cain.txt"
 

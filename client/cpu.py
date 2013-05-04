@@ -7,10 +7,9 @@ import tempfile
 import multiprocessing
 
 from .server import CloudbreakerServer
+from .config import john_conf, john_bin
 
 # General configuration
-john_conf = "/etc/john/john.conf"
-john_bin = "/home/ubuntu/john-run/john"
 john_session = "cpu-session"
 
 dict_filename = "/home/ubuntu/cain.txt"
