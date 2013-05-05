@@ -44,7 +44,8 @@ class Wordlist:
 
         # Use tee to split the wordlist off
         if wordlist is not None:
-            save_proc = subprocess.Popen(["tee", wordlist.name], stdin=out, stdout=subprocess.PIPE, stderr=self.devnul)
+            save_proc = subprocess.Popen(["tee", wordlist.name], stdin=out, \
+                stdout=subprocess.PIPE, stderr=self.devnull)
             out = save_proc.stdout
 
         return out

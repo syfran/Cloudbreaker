@@ -36,7 +36,6 @@ class CloudbreakerServer:
                     time.sleep(10)
 
             share = response.json
-            share = None
             # If the server sent sleep or we don't have a request, then sleep
             if share is None:
                 time.sleep(10)
