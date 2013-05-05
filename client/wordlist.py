@@ -3,7 +3,7 @@ Provide a wordlist as a source for passwords
 """
 
 import tempfile
-import subprocess as sp
+import subprocess
 
 from .config import john_bin, john_conf
 
@@ -32,19 +32,19 @@ class Wordlist:
         Return a pipe output of the wordlist. If the wordlist file is given, it
         will also output the list to that file
         """
-        slice_proc = sp.Popen(wordlist_slice_cmd % self.cmd_args, shell=True,
-            stdout=sp.PIPE, stderr=self.devnull)
+        slice_proc = subprocess.Popen(wordlist_slice_cmd % self.cmd_args, shell=True,
+            stdout=subprocess.PIPE, stderr=self.devnull)
         if self.rules:
-            mangle_proc = sp.Popen(john_mangle_cmd % self.cmd_args, shell=True,
-                stdin = slice_proce.stdout, stdout=sp.PIPE,
+            mangle_proc = subprocess.Popen(john_mangle_cmd % self.cmd_args, shell=True,
+                stdin = slice_proc.stdout, stdout=subprocess.PIPE,
                 stderr=self.devnull)
-            out = mangle_proce.stdout
+            out = mangle_proc.stdout
         else:
             out = slice_proc.stdout
 
         # Use tee to split the wordlist off
         if wordlist is not None:
-            save_proc = sp.Popen(["tee", wordlist.name], stdin=out, stdout=sp.PIPE, stderr=self.devnul)
+            save_proc = subprocess.Popen(["tee", wordlist.name], stdin=out, stdout=subprocess.PIPE, stderr=self.devnul)
             out = save_proc.stdout
 
         return out
