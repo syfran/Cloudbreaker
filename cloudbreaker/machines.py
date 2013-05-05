@@ -62,7 +62,7 @@ class Machine:
         # We are no longer working, so we will update work_time and set
         # work_start to 0
         if len(self.workshares) == 0:
-            self.work_time += now - self.work_start
+            self.work_time += time.time() - self.work_start
             self.work_start = 0
         self._calc_hashrate()
 
