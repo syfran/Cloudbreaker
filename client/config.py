@@ -1,6 +1,7 @@
 """
 Configuration variables for coudbreaker client
 """
+import time
 
 # Server config variables
 conf_path = "/etc/cloudbreaker.conf"
