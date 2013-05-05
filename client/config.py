@@ -20,9 +20,10 @@ def load_config():
     """
     global server_addr
     global machine_uuid
+    global conf_path
     while server_addr is None or machine_uuid is None:
         try:
-            with open(config.conf_path, 'r') as conffile:
+            with open(conf_path, 'r') as conffile:
                 server_addr = conffile.readline().strip()
                 machine_uuid = conffile.readline().strip()
         except IOError:
