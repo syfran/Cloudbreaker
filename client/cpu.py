@@ -27,7 +27,7 @@ else:
 
 devnull = open('/dev/null', 'w')
 
-server = CloudBreakerServer()
+server = CloudbreakerServer()
 while True:
     share = server.get_workshare(workshare_size)
 
