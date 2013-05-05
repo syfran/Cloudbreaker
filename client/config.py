@@ -28,8 +28,5 @@ def load_config():
                 machine_uuid = conffile.readline().strip()
         except IOError:
             server_addr = None
-            _uuid = None
-            if wait == 0:
-                return False
-            else:
-                time.sleep(wait)
+            machine_uuid = None
+            time.sleep(5)
