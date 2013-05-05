@@ -5,7 +5,7 @@ import requests
 import sys
 import time
 
-from config import server_addr, machine_uuid, load_config
+import config
 
 class CloudbreakerServer:
     """ 
@@ -16,14 +16,14 @@ class CloudbreakerServer:
         """
         Read in the configuration file
         """
-        load_config()
+        config.load_config()
 
     def get_workshare(self, workshare_size):
         """
         Get a new workshare from the server of the given size
         """
-        post_params = {"uuid":machine_uuid, "size":workshare_size}
-        get_workshare_addr = "http://" + server_addr + "/getshare"
+        post_params = {"uuid":config.machine_uuid, "size":workshare_size}
+        get_workshare_addr = "http://" + config.server_addr + "/getshare"
         share = None
         # Continue to request shares until we get one
         while share is None:
@@ -50,14 +50,14 @@ class CloudbreakerServer:
         Tell the server that we have completed the workshare password should be
         set to None if one hasn't been found
         """
-        post_params = {"uuid":machine_uuid, 
+        post_params = {"uuid":config.machine_uuid, 
             'hash':workshare['hash'],
             'num_hashes':num_hashes,
             'size':workshare['size'],
             'start':workshare['start']}
         if password is not None:
             post_params['password'] = password
-        complete_workshare_addr = "http://" + server_addr + "/completeshare"
+        complete_workshare_addr = "http://" + config.server_addr + "/completeshare"
         success = None
         # Continue to try to submit until we get the server
         while success is None:
