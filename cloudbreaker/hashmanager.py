@@ -95,7 +95,8 @@ class Workshare:
     """
     def __init__(self, hashstring, hashtype, passwordsource, start, size):
         self.hashstring = hashstring
-        self.hashtype = hashtype self.passwordsource = passwordsource
+        self.hashtype = hashtype
+        self.passwordsource = passwordsource
         self.start = start
         self.size = size
         self.init_time = time.time()
