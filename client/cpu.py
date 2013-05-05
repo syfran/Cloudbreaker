@@ -63,9 +63,9 @@ while True:
             # If there is no password, then we did as many hashes as is in the
             # wordlist
             password = None
-            num_hashes = subprocess.check_output(['wc', '-l', wordlist.name]).split(' ')[0]
+            num_hashes = subprocess.check_output(['wc', '-l', wordlist_output.name]).split(' ')[0]
         else:
             # If we did find the hash then we can find the number of hashes
             # based on its position in the wordlist
-            num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist.name]).split(':')[0]
+            num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist_output.name]).split(':')[0]
         server.complete_workshare(share, num_hashes, password)

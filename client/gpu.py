@@ -30,7 +30,7 @@ while True:
 
     # Write to temporary files that will be erased on close
     with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() \
-        as outfile, tempfile.NamedTemporaryFile() as wordlist:
+        as outfile, tempfile.NamedTemporaryFile() as wordlist_output:
 
         cmd_args["passfile"] = passf.name
         cmd_args["outfile"] = outfile.name
@@ -54,7 +54,7 @@ while True:
         # Find the number of passwords tried
         if password == "":
             password = None
-            num_hashes = subprocess.check_output(['wc', '-l', wordlist.name]).split(' ')[0]
+            num_hashes = subprocess.check_output(['wc', '-l', wordlist_output.name]).split(' ')[0]
         else:
-            num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist.name]).split(':')[0]
+            num_hashes = subprocess.check_output(['grep', '-xn', password, wordlist_output.name]).split(':')[0]
         server.complete_workshare(share, num_hashes, password)
