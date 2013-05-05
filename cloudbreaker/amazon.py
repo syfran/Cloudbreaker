@@ -17,7 +17,7 @@ cpu_userdata =     """#! /bin/bash
                       echo "%s" >> /etc/cloudbreaker.conf
                       git clone %s /home/ubuntu/cloudbreaker
                       echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpu.py&" >> /etc/rc.local
                       echo "exit 0" >> /etc/rc.local
                       /etc/rc.local
                     """
@@ -27,8 +27,8 @@ gpu_userdata =     """#! /bin/bash
                       echo "%s" >> /etc/cloudbreaker.conf
                       git clone %s /home/ubuntu/cloudbreaker
                       echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/gpucloudbreaker.py&" >> /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpucloudbreaker.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/amiscripts/gpu.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpu.py&" >> /etc/rc.local
                       echo "exit 0" >> /etc/rc.local
                       /etc/rc.local
                     """
@@ -51,7 +51,7 @@ aws_region = "us-east-1"
 keypair = "login.cs"
 
 # Git repository that is used to pull the amiscripts
-cloudbreaker_git = "git://github.com/syfran/Cloudbreaker.git"
+cloudbreaker_git = "-b ami-refactor git://github.com/syfran/Cloudbreaker.git"
 
 def init_boto():
     """
