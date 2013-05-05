@@ -17,7 +17,7 @@ cpu_userdata =     """#! /bin/bash
                       echo "%s" >> /etc/cloudbreaker.conf
                       git clone %s /home/ubuntu/cloudbreaker
                       echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpu.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/client/cpu.py&" >> /etc/rc.local
                       echo "exit 0" >> /etc/rc.local
                       /etc/rc.local
                     """
@@ -27,8 +27,8 @@ gpu_userdata =     """#! /bin/bash
                       echo "%s" >> /etc/cloudbreaker.conf
                       git clone %s /home/ubuntu/cloudbreaker
                       echo "cd /home/ubuntu/cloudbreaker && git pull" > /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/gpu.py&" >> /etc/rc.local
-                      echo "python /home/ubuntu/cloudbreaker/amiscripts/cpu.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/client/gpu.py&" >> /etc/rc.local
+                      echo "python /home/ubuntu/cloudbreaker/client/cpu.py&" >> /etc/rc.local
                       echo "exit 0" >> /etc/rc.local
                       /etc/rc.local
                     """
