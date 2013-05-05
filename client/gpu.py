@@ -7,13 +7,10 @@ import tempfile
 
 from .server import CloudbreakerServer
 from .config import john_bin, john_conf, oclHashcat_bin
+from .wordlist import Wordlist
 
 # General configuration
 john_session = "gpu-session"
-
-dict_filename = "/home/ubuntu/cain.txt"
-
-john_mangle_cmd = john_bin + " -pipe -stdout -rules --session=%(session)s | tee %(wordlist)s"
 
 oclHashcat_cmd = oclHashcat_bin + " --disable-potfile -m %(format_num)s -o %(outfile)s --outfile-format=2 %(passfile)s"
 
@@ -32,22 +29,20 @@ while True:
     cmd_args["session"] = john_session
 
     # Write to temporary files that will be erased on close
-    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() as outfile, tempfile.NamedTemporaryFile() as wordlist:
+    with tempfile.NamedTemporaryFile() as passf, tempfile.NamedTemporaryFile() \
+        as outfile, tempfile.NamedTemporaryFile() as wordlist:
 
         cmd_args["passfile"] = passf.name
         cmd_args["outfile"] = outfile.name
-        cmd_args["wordlist"] = wordlist.name
 
         # Write our hash to a password file
         passf.write(share["hash"] + "\n")
         passf.flush()
+        
+        wordlist = Wordlist("cain", share["start"], share["size"], john_session)
 
-        # Read a slice of the dictionary
-        dict_output = subprocess.Popen("tail -n +%(start)d %(dict)s | head -n %(size)d" % cmd_args, 
-            shell=True, stdout=subprocess.PIPE, stderr=devnull)
-        # Pass it through a mangler
-        mangler = subprocess.Popen(john_mangle_cmd % cmd_args, shell=True, 
-            stdin=dict_output.stdout, stderr=devnull, stdout=subprocess.PIPE)
+        mangler_out = wordlist.get_pipe(wordlist_output)
+
         # Run cudaHashcat-plus on the wordlist
         hashcat = subprocess.Popen(oclHashcat_cmd % cmd_args, 
             stdin=mangler.stdout, stderr=devnull, stdout=devnull, shell=True)
