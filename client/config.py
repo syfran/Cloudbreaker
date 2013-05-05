@@ -13,8 +13,6 @@ john_bin = "/home/ubuntu/john-run/john"
 
 oclHashcat_bin = "/home/ubuntu/oclHashcat/cudaHashcat-plus64.bin"
 
-
-
 def load_config():
     """
     Load the configuration file into the variables. Waits until the file can be
