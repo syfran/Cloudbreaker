@@ -15,8 +15,6 @@ john_session = "cpu-session"
 
 dict_filename = "/home/ubuntu/cain.txt"
 
-john_mangle_cmd = john_bin + " -pipe -stdout -rules --session=%(session)s-rule | tee %(wordlist)s"
-
 john_command = john_bin + " -pipe --format=%(format)s --nolog --pot=%(potfile)s --session=%(session)s %(passfile)s"
 
 # This hack allows us to get a smaller workshare if we're on a t1.micro
