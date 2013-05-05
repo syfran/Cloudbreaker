@@ -6,9 +6,10 @@ import sys
 import tempfile
 import multiprocessing
 
-from .server import CloudbreakerServer
-from .config import john_conf, john_bin
-from .wordlist import Wordlist
+from server import CloudbreakerServer
+from config import john_conf, john_bin
+from wordlist import Wordlist
+
 
 # General configuration
 john_session = "cpu-session"

@@ -5,9 +5,9 @@ import subprocess
 import sys
 import tempfile
 
-from .server import CloudbreakerServer
-from .config import john_bin, john_conf, oclHashcat_bin
-from .wordlist import Wordlist
+from server import CloudbreakerServer
+from config import john_bin, john_conf, oclHashcat_bin
+from wordlist import Wordlist
 
 # General configuration
 john_session = "gpu-session"

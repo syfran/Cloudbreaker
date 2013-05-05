@@ -5,7 +5,7 @@ Provide a wordlist as a source for passwords
 import tempfile
 import subprocess
 
-from .config import john_bin, john_conf
+from config import john_bin, john_conf
 
 # Provide a mapping from the wordlist's name to it's location
 wordlist_lookup = {"cain":"/home/ubuntu/cain.txt"}

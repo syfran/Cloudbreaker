@@ -5,7 +5,7 @@ import requests
 import sys
 import time
 
-from .config import server_addr, machine_uuid, load_config
+from config import server_addr, machine_uuid, load_config
 
 class CloudbreakerServer:
     """ 
